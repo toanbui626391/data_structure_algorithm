@@ -18,9 +18,9 @@ class Solution:
         longest = 0
         length = 0
         for e in set_nums:
-            if e-1 not in set_nums:
+            if e-1 not in set_nums: #check for head of sequence
                 length = 1
-                while e + length in set_nums:
+                while e + length in set_nums: 
                     length += 1
             longest = max(length, longest)
         return longest
