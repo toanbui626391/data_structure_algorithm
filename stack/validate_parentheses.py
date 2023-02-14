@@ -12,6 +12,11 @@
     # check the current close parentheses with the last open parentheses
     #why do we need to use stack in this case:
         #stack will help use to keep track of the most recent open parentheses. Because we have to compare the current close parentheses with the current open parentheses
+    #important note:
+        #using stack to keep open by sequence
+        #using map to mapping between close type and open type
+        #check the current close with the last open. they have to be the same for the parentheses to be valid
+        #check for the case of empty input string
     #variable:
         #map (dict): to map between close and open parenthesis
         #stack (list): to keep track of open parentheses
