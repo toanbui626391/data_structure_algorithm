@@ -8,7 +8,13 @@
         # we have to sort nums in ascending order to solve this problem 
         #condition to stop seach for a the outer loop: if a > 0. because sum of three is 0 therefore it have to have at least one number smaller than 0
         #condition to check for the current a position is duplicate. if i >0 and nums[i - 1] = nums[i]
-        #condition to check for duplicate in position b. while l < r and nums[l] == nums[l-1]
+        #condition to check for duplicate in position b. while l < r and nums[l] == nums
+#strategy to solve the problem
+    #key one: sort nums list because we want to move three sum problem into two sum with sorted array
+    #key two: nums contains duplicate element but return must not contain duplicate triplelet
+
+    #variable:
+        # res (list): to store a list of result
 ########################################reference solution
 from typing import List
 class Solution:

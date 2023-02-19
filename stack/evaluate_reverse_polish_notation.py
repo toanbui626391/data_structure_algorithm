@@ -11,6 +11,9 @@
     #variable:
         #stack to keep track of the two most recent numbers from tokes string
 
+    #why using stack?
+        #stack to keep current two value of every operation.
+
 
 
 ##########################################reference solution
