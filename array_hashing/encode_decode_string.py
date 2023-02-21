@@ -20,13 +20,19 @@
         # the # will help in decode state to finde the lenght of the current word. because in decode state length is string and we do not know it value
         # we compute length of the current word with index i, j
             #j (int) is the index of # at the current word
-            #i (int) is the index of # for the next word
+            #i (int) is the index of the start search for length
 ##########################################reference solution
 class Solution:
     """
     @param: strs: a list of strings
     @return: encodes a list of strings to a single string.
     """
+
+    # def encode(self, strs):
+    #     res = ""
+    #     for s in strs:
+    #         res += str(len(s)) + "#" + s
+    #     return res
 
     def encode(self, strs):
         res = ""
@@ -39,14 +45,26 @@ class Solution:
     @return: decodes a single string to a list of strings
     """
 
+    # def decode(self, s):
+    #     res, i = [], 0
+
+    #     while i < len(s):
+    #         j = i
+    #         while s[j] != "#":
+    #             j += 1
+    #         length = int(s[i:j]) # the #seperator will help us find the length of the current word
+    #         res.append(s[j + 1 : j + 1 + length])
+    #         i = j + 1 + length
+    #     return res
+
     def decode(self, s):
         res, i = [], 0
 
         while i < len(s):
             j = i
-            while s[j] != "#":
+            while s[j] != "#": #find length of the current string
                 j += 1
-            length = int(s[i:j]) # the #seperator will help us find the length of the current word
-            res.append(s[j + 1 : j + 1 + length])
-            i = j + 1 + length
+            length = int(s[i:j])
+            res.append(s[j+1: j+1+length])
+            i = j+1+length 
         return res
