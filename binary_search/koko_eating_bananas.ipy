@@ -1,0 +1,34 @@
+#understand problem
+
+#strategy to solve the problem
+    #goal: find min(k) or minium speed which koko can finish eating piles of banana within h hours
+    #why:
+        #koko want to eat each pile for an hour. so max(k) = max(piles)
+        #therefore h (hour) >= len(piles)
+        #given all posible k using binary search to find min k
+        #we still need res = min(res, k) because binary search help reduce step but not guaranty a min solution
+
+    #variables:
+        #l, r (int): to makr search space for speed k
+        #res (int): to hold the current min value
+
+###############################################reference solution
+from typing import List
+import math
+class Solution:
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        l, r = 1, max(piles)
+        res = max(piles)
+
+        while l <= r:
+            k = (l + r) // 2
+
+            totalTime = 0
+            for p in piles:
+                totalTime += math.ceil(p / k)
+            if totalTime <= h:
+                res = min(res, k)
+                r = k - 1
+            else:
+                l = k + 1
+        return res
