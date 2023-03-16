@@ -31,20 +31,19 @@ class Solution:
         return res
     
 #############################reference solution
-from collections import Counter, defaultdict
 class Solution:
     def characterReplacement(self, s: str, k: int) -> int:
-        res = 0
-        l = 0
-        char_counter = defaultdict(int)
-        max_f = 0
+        char_counter = Counter()
+        l, res = 0, 0
+        max_char = 0
         for r in range(len(s)):
             char_counter[s[r]] += 1
-            max_f = max(max_f, char_counter[s[r]])
-            if (r-l+1) - max_f > k:
-                char_counter[s[l]] = char_counter[s[l]] - 1
+            max_char = max(max_char, char_counter[s[r]])
+            total_char = r-l+1
+            if total_char - max_char > k:
+                char_counter[s[l]] -= 1
                 l += 1
-                
-            res = max(res, r-l+1)
+            else:
+                res = max(res, total_char)
         return res
             
