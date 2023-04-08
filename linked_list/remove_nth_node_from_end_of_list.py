@@ -7,6 +7,7 @@
         #right, left (ListNode): as pointer 
         #left = dummy.
     #error notes:
+        #right = head and left = dummy. we have to make sure left - right = n
         #left have to start from dummy ListNode(0, head) to avoid NonType error because pointer is out of range
         #if you move n time then the distin between start and current position is n - 1.
         #using dummy left, we have make different position is n - 1+ 1 = n

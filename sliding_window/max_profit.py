@@ -11,6 +11,11 @@
         #res (int): to search for result
         #lowest (int): to keep track of the lowest price in the past
 ###########################################################################reference solution
+"""
+sliding window technique:
+    we use two pointer (left, right) to loop through array of number
+    both will start at the begining the the array.
+"""
 from typing import List
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:

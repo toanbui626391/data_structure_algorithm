@@ -2,10 +2,14 @@
 
     #why:
         #because each linked list is sorted, we can grow a sorted linked list by compare each element in the two linked list to decide which element is on the growing linked list
-        #by default sorted is increasing value    
-#variables:
+        #by default sorted is increasing value   
+        #start with dummy ListNode and grow it
+    #variables:
         #dummy (ListNode): dummy starting node
         #tail (ListNode): current node to grow for each iteration
+    #error notes:
+        #remember to update curr note. curr = curr.next. to make node linked together
+        #we have to remember input varialbes
 
 #############################################reference solution
 class Solution:
