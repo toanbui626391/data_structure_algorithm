@@ -1,11 +1,11 @@
 """
 strategy to solve the problem
     #why:
+        #because we have n + 1 int in range [1, n] and only on repeat. Therefore, it is a linked list problem and we do not have node with value 0.
         #this is a linked list problem nums[index] equal to node.next
         #using floyd algorithm to find duplicate
             #find first meet node with slow and fast
             #find the second meet. and this is duplicate value
-
 """
 ########################reference solution
 

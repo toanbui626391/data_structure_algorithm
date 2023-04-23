@@ -53,32 +53,43 @@ class Solution:
 
     #why:
         #using two pointer strategy
+        #counter (Counter): count in reverse to compare the s1 to the current window. counter[char] == 0 then that char is matched
+        #we also know len of the window base on len of s1. therefore we can we can decide when to move left pointer base on that.
+
     #variables:
-        #counter: to keep track of number of element of sustring compare the original string
-        #matched: to count map
-        #i, i-len(s1) (int): to keep track of left pointer and right pointer of the window
+        #counter (Counter): to count in reverse from s1 to 0. If one key is 0 then that char is matched
+        #matched, counter_len (int): to count matched compute to elements in s1. if matched = counter_len then substring is permutation of s1
+        #len_s1 (int): len of s1 is also the width of sliding window
+        #r, r-len_s1 (int): to keep track of left pointer and right pointer of the window
             #right pointer will + matched
             #left pointer will - match
             #they work together compute and update the match of the current window
             
 #solution 3 is better than solution one because it reduce sort every time compare a window in s2 string
+            #they work together compute and update the match of the current window
 from collections import Counter
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
-        #counter to compute the different between current window with the origin string
-        cntr, w, matched = Counter(s1), len(s1), 0   
+        if len(s2) < len(s1):
+            return False
 
-        for i in range(len(s2)):
-            if s2[i] in cntr: #right pointer
-                cntr[s2[i]] -= 1
-                if cntr[s2[i]] == 0:
+        counter = Counter(s1)
+        matched, counter_len = 0, len(counter)
+        len_s1 = len(s1)
+
+        for r in range(len(s2)):
+
+            if s2[r] in counter:
+                counter[s2[r]] -= 1
+                if counter[s2[r]] == 0:
                     matched += 1
-            if i >= w and s2[i-w] in cntr:  #left pointer
-                if cntr[s2[i-w]] == 0:
-                    matched -= 1
-                cntr[s2[i-w]] += 1
 
-            if matched == len(cntr):
+            if r >= len_s1 and s2[r-len_s1] in counter:
+                if counter[s2[r-len_s1]] == 0:
+                    matched -= 1
+                counter[s2[r-len_s1]] += 1
+
+            if matched == counter_len:
                 return True
 
         return False

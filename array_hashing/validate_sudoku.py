@@ -22,8 +22,8 @@ class Solution:
         row = defaultdict(set)
         col = defaultdict(set)
         square = defaultdict(set)
-        for r in range(3):
-            for c in range(3):
+        for r in range(9):
+            for c in range(9):
                 if board[r][c] == ".":
                     continue
                 if (board[r][c] in row[r] or

@@ -11,7 +11,17 @@ strategy to solve the problem:
 
         #why do we need remove and insert helper function
             #remove and update is to update the most recent use
-        #
+    
+    #remove note from doubly linked list
+        #find prev, nxt node
+        # change doubly linked list as follow: prev.next, nxt.prev = nxt, prev
+    #insert node to the right
+        find prev, nxt = self.right.prev, self.right
+        #add double linked list for node. node.prev, node.next = prev, nxt
+        #change linked list for prev and nex. prev.next = nxt.prev = node
+    #put
+        #if key in cache remove node. we have to create and add new node to cache 
+        #after add new node to cache, check for key len if over capacity remove lru node
     #error notes:
         #we usaully wrong at put
             #when remove lru from doubly linked list, we also have to delete that from hash map

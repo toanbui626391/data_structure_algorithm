@@ -1,5 +1,8 @@
-#problem understanding:
-    #
+#problem understanding
+    #Given an array of integers nums and an integer target, 
+    #return indices of the two numbers such that they add up to target
+    #You may assume that each input would have exactly one solution
+    #, and you may not use the same element twice
 
 #strategy to solve the problem:
     #because it is two sum. therefore we given the index we know the value of the second value

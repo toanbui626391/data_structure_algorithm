@@ -15,25 +15,25 @@ strategy to solve the problem
 from typing import List
 class Solution:
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
-        candidates.sort()
 
-        res = []
-
-        def backtrack(cur, pos, target):
-            if target == 0:
-                res.append(cur.copy())
+        def dfs(i, container, total):
+            #base base
+            if total == target:
+                res.append(container[:]) #res is global, deep copy container
                 return
-            if target <= 0:
+            #stop search
+            if i >= len(candidates) or total > target:
                 return
-
-            prev = -1
-            for i in range(pos, len(candidates)):
-                if candidates[i] == prev:
+            prev = None
+            for i in range(i, len(candidates)):
+                if candidates[i] == prev: #skip consider duplicate subTree, have to use condition with prev
                     continue
-                cur.append(candidates[i])
-                backtrack(cur, i + 1, target - candidates[i])
-                cur.pop()
+                container.append(candidates[i])
+                dfs(i+1, container, total + candidates[i])
                 prev = candidates[i]
-
-        backtrack([], 0, target)
+                container.pop()
+        
+        res, container = [], []
+        candidates.sort()
+        dfs(0, container, 0)
         return res

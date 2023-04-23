@@ -6,11 +6,16 @@
 #strategy to solve problem:
     #count (hash): to count number of element happend
     #freq (list of list): 
-        #index is all possible frequent of element   
+        #index is all possible frequent of element. len(nums) + 1   
         #element (list): all element which happend index frequent  
+        #list of list to solve the problem of two element happend the same time
     #res (list): to build response result
         #because freq is to hold all possible frequent we have to loop throug it to collect value
         #stop when we have collect all value
+
+#note about list extend() vs append:
+    # append will treat a list as one element
+    # extend will extend and treat a list as multiple elemnt
 
 ###################################reference solution
 from collections import Counter
@@ -26,8 +31,8 @@ class Solution(object):
         freq = [[] for i in range(len(nums) + 1)]
 
         #build freq
-        for q, v in counter.items():
-            freq[v].append(q)
+        for v, f in counter.items():
+            freq[f].append(v)
 
         #build res
         res = []

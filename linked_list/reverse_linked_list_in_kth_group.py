@@ -7,11 +7,13 @@ strategy to solve the problem:
         #we also need helper function to find the next node of the current group
         #we also need a dummy node. start dummy node which linked to head.
     #variable
+        #dummy (ListNode): which linked to head
         prev_group, kth, next_group (ListNode): to keep track of previous node of group. the kth node of group and the next node of the current group  
     #error notes:
         #start dummy node which is linked to head
         #condition to break loop. while not kth
         #remember to update prev_group.next and prev_group
+        #when do reverse, prev = next_group
 """
 
 class Solution:

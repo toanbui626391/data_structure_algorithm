@@ -13,6 +13,9 @@
     #key one: sort nums list because we want to move three sum problem into two sum with sorted array
     #key two: nums contains duplicate element but return must not contain duplicate triplelet
 
+    #key three: total = a + b + c = 0
+        #the outer for loop the search for a
+        #the inner loop while is to search for b and c like two sum with soreted numbers array 
     #variable:
         # res (list): to store a list of result
 ########################################reference solution

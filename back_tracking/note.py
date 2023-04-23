@@ -1,22 +1,3 @@
-"""
-strategy to solve the problem
-    problem:
-        given n queens in n*n chess board. Find all queen position which they do not attach each others
-    why:
-        backtracing(r) or dfs
-            r (int): row index
-            #base case, when traverse all row (r == n) collect  borad. board is a list of row string
-            #condition for invalid board column index have been placed a quen or c in col
-            #positive diagnal: (r+c) in positive diagnal set
-            #negative diagnal: (r-c) in negative diagnal set
-
-            if valid board, we have to update col, positiveDiagnal, negativeDiagnal and board[c][r]
-
-            dfs(r+1)
-
-            #when use for for all child build back the input col, pos_diag, neg_diag and board
-"""
-
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
         col = set()

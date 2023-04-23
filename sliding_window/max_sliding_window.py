@@ -3,8 +3,12 @@
     #goal: find max value in window with size k
     #why:
         #using sliding windows
-        #using deque
-
+        #using deque: 
+            #to hold the index of the current window
+            #to hold index of decreasing value of nums
+        #the key idea:
+            #to maintain maintain the decreasing que of index
+            #for very right index remove index which have value smaller than right index
 from typing import List
 from collections import deque
 class Solution:

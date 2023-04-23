@@ -1,7 +1,7 @@
 #strategy to solve the problem:
     #why:
         #using slow and fast strategy to find middle. slow.next will be head of the second half
-            #slow behind and move one while fast is first and move twice
+            #slow behind and move one while fast is first and move twice. start with slow, fast = head, head.next
         #reverse the second half. remember to change from slow.next = None
         #we do need temp1, temp2 for merge two linked list together. because we we need to update first and second for next iteration
 
@@ -15,6 +15,7 @@
             #while second:
         #rember to complete the first half after find middle
             #slow.next = None
+        #we do need temp1, temp2 for merge two linked list together. because we we need to update first and second for next iteration
 
 class Solution:
     def reorderList(self, head: ListNode) -> None:

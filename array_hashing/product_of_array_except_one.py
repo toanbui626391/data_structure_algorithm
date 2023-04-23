@@ -27,22 +27,19 @@ class Solution:
             post = post*nums[length-i-1]
         return(sol)
 
+
+
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        length=len(nums)
-        #build array to hold temp data and result
-        pre = [1] * length
-        post = [1] * length
-        value = 1
-        for i in range(length):
-            pre[i] *= value
-            value *= nums[i] * value 
+        res = [1] * (len(nums))
 
-        value = 1
-        for i in range(length - 1, 0, -1):
-            post[i] *= value
-            value = nums[i] * value
-
-
+        prefix = 1
         for i in range(len(nums)):
+            res[i] = prefix
+            prefix *= nums[i]
+        postfix = 1
+        for i in range(len(nums) - 1, -1, -1):
+            res[i] *= postfix
+            postfix *= nums[i]
+        return res
             
