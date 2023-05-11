@@ -1,10 +1,13 @@
 """
 strategy to solve the problem
     problem:
-        given a grid of island 1 is land and 0 is water. island is all connected land
-    strategy to solve the problem
+        given a grid of island 1 is land and 0 is water. island is all connected land. compute number of island
+    why:
         move to each cell and check that this cell is land and have not visited
         using dfs(r, c) to mark it is visited and explore other neighbor
+        dfs(r, c): 
+            given the index r, c in matrix explore all four direction.
+            base case: can not out of range for w, c. can not be an island. can not in visited
 """
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:

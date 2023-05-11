@@ -1,13 +1,20 @@
 """
-startegy to solve the problem
-    problem: given a list of costs for each stair case. for each steps you can move one or two staircase and pay cost[i]. compute the min cost to claim that stair
+strategy to solve the problem
+    problem: climb stars with cost associate. you can climb on or two step and have to pay the associate cost of the staircase
     why:
-        using dinamic programming with compute from the bottom of decision tree.
+        d[i] is the min cost you pay at index i
+        dp[i] = min(cost[i] + dp[i-1], cost[i]+dp[i-2])
+        return min(dp[-1], dp[-2]) #you can reach the last index by the last index or the second last
+
 """
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-        #start from the third staircase. because we know value for the two last stair case and go back to the decision tree
-        for i in range(len(cost) - 3, -1, -1):
-            cost[i] += min(cost[i + 1], cost[i + 2])
-
-        return min(cost[0], cost[1]) #check the cost of take one or two step at root
+        #edge case
+        if len(cost) <= 2:
+            return min(cost)
+        #dp
+        dp = [0] * len(cost)
+        dp[0], dp[1] = cost[0], cost[1] #because we can start at index 0 or index 1
+        for i in range(2, len(cost)):
+            dp[i] = min(dp[i-1]+cost[i], cost[i]+dp[i-2])
+        return min(dp[-1], dp[-2])
