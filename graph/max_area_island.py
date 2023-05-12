@@ -1,3 +1,6 @@
+"""
+strategy to solve the problem:
+"""
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
 
