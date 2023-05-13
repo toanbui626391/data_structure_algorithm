@@ -1,8 +1,11 @@
 """
 strategy to solve the problem
     problem:
-        given a matrix m*n which have "X" and "O". Flip area of "O" which have surrounded by "X" four direction (left, right, above, below).
+        given a matrix size m*n of "X" and "O". Flip the surrounded (four directions) area of "O" to "X".
     why:
+        if outer ring of matrix is "0" then it is not surrounded. we start from the outer ring to flip "0" to "T"
+        flip every "0" left to "X" because it cell is surrouned
+        flip back "T" to "O" 
 """
 from typing import List
 class Solution:

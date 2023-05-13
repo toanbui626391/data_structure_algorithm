@@ -6,6 +6,10 @@ strategy to solve the problem
     why:
         using newToOld hashMap to keep track of new and it copy
         make a copy if have not do it yet. connect copy with its neighbor
+        remember to check the edge case when input node is None
+        dfs(node):
+            give copy node if input node exist in the map
+            normal case. make copy node and add to the map. build neighbors for for copy node
 """
 class Solution:
     def cloneGraph(self, node: "Node") -> "Node":

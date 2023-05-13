@@ -2,6 +2,8 @@
 strategy to solve the problem
     problem:
         given a beginWord, endWord and wordList. find the shortest tranformtion path from befinWord to endWord
+    why:
+        using bfd() because we want to it find depth of the tree or graph faster than dfs
 """
 import collections
 from collections import deque

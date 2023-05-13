@@ -1,5 +1,11 @@
 """
 strategy to solve the problem:
+    problem: given a matrix with 1 is land and 0 is water. island is connected land. compute the largest land insland
+    why
+        using dfs for explore graph problem
+        dfs(r, c):
+            base case, return 0 if r, c is not value or (r, c) in visited or is water
+            normal case. update visited, count 1 and continue explore 
 """
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
