@@ -1,9 +1,12 @@
+"""
+strategy to solve the problem
+    problem: 
+        given a list of edges. check is it a valid tree
+    why:
+        using union find algorithm to count connected component by build tree
+        if connected component is 1 then this is a valid tree with node redundant egdes
 
-    
-    
-    
-# alternative solution via DSU O(ElogV) time complexity and 
-# save some space as we don't recreate graph\tree into adjacency list prior dfs and loop over the edge list directly
+"""
 class Solution:
     """
     @param n: An integer

@@ -1,6 +1,13 @@
 """
 strategy to solve the problem
-    problem: given number of course (int) ad a list of list present prerequisites. Check that can we complete all course. Or we do not have circle graph
+    problem:
+        given number of course (int) ad a list of list present prerequisites. Check that can we complete all course. Or we do not have circle graph
+    why:
+        using dfs
+            build preMap {course: [courses_to_completed]}
+            check have circle from course or not
+            #after check we have to remove course from visited and node is not circle
+
 """
 from typing import List
 class Solution:
@@ -27,9 +34,9 @@ class Solution:
             for pre in preMap[crs]:
                 if not dfs(pre):
                     return False
-            #clean the current node to prepare to process the parent node and return True    
+            #remove course from visited for next course check and mark course can be completed 
             visiting.remove(crs)
-            preMap[crs] = []
+            preMap[crs] = [] #update empty list for node which it not cycle so that we will not process that node again
             return True
         #if one of the course can not complete return False, all course complete return True
         for c in range(numCourses):
