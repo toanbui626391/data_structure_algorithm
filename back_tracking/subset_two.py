@@ -1,6 +1,9 @@
 """
 strategy to solve the problem:
+    problem: given a list of number nums which may contains duplicate values. Find all subset of list nums which do not contain duplicate
     why:
+        because nums may contains duplicates therefor to avoid duplicate in subsets we have to consider to skip duplicate element in case of not choosing first element of duplicates
+        because not choosing first element of duplicate is the same problem of it's parent node
         using dfs(i, subseet) just like subset problem but when we decide not to add, we not add consider that same element
 """
 
