@@ -5,6 +5,7 @@ strategy to solve the problem
             i is the index of element in candiates which is consider
             cur: the current element in consider
             total: the current sum value in consider
+        combination: we can choose the same element multiple time to form a combination
         
 
 """
