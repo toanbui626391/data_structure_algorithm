@@ -7,10 +7,9 @@ strategy to solve the problem
         dfs(i, x, y):
             i (int): index of element in word
             x, y (int): index of col and row in board
-        base case for False: out of bound for x and y or word[i] != board[y][x]
-        condition to stop search and return True: i == len(word) - 1. because at i we have alread check and then return
-        search at each step: 
-            dfs(i+1, x+1, y) #
+        recursive search from the start of word at every cell of board
+            #when to return False, invalid index of x, y of board and word[i] != board[x][y]
+            #when to return True i == len(word) - 1 or we have finished all the search of letter in word
 """
 
 class Solution:

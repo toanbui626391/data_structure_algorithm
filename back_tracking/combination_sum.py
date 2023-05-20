@@ -23,7 +23,7 @@ class Solution:
                 return
             #add element, and continue add that element
             cur.append(candidates[i])
-            dfs(i, cur, total + candidates[i])
+            dfs(i, cur, total + candidates[i]) #choose the same element multiple time
             #do not add element and continue with next element
             cur.pop()
             dfs(i + 1, cur, total)

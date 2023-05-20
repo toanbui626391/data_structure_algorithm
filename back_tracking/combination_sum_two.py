@@ -12,28 +12,28 @@ strategy to solve the problem
         sort numbs to know where is duplicates in candidates
         if duplicates skip it
 """
-from typing import List
 class Solution:
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
-
-        def dfs(i, container, total):
-            #base base
-            if total == target:
-                res.append(container[:]) #res is global, deep copy container
-                return
-            #stop search
-            if i >= len(candidates) or total > target:
-                return
-            prev = None
-            for i in range(i, len(candidates)):
-                if candidates[i] == prev: #skip consider duplicate subTree, have to use condition with prev
-                    continue
-                container.append(candidates[i])
-                dfs(i+1, container, total + candidates[i])
-                prev = candidates[i]
-                container.pop()
-        
-        res, container = [], []
+        res, com = [], []
         candidates.sort()
-        dfs(0, container, 0)
+
+        def dfs(i, com, total):
+            #base case
+            if total == target:
+                res.append(com[:])
+                return
+            if total > target or i > len(candidates):
+                return
+
+            #normal case
+            prev = None #init prev with None
+            for j in range(i, len(candidates)):
+                if candidates[j] == prev:
+                    continue
+                com.append(candidates[j])
+                dfs(j+1, com, total+candidates[j])
+                prev = candidates[j]
+                com.pop()
+
+        dfs(0, com, 0)
         return res
