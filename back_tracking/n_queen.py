@@ -3,6 +3,9 @@ strategy to solve the problem
     problem:
         given n queens in n*n chess board. Find all queen position which they do not attach each others
     why:
+        this is problem which we find combination of r, c but queen in board[r][c] can not attact each other.
+            board[r][c] can not attact each other so we just skip this position
+            we keep track of sets col, posDiag, negDiag because queen can attact horizontal, vertical, positve and negative niagnal
         backtracing(r) or dfs
             r (int): row index
             #base case, when traverse all row (r == n) collect  borad. board is a list of row string
