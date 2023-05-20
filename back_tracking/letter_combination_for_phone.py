@@ -7,6 +7,7 @@ strategy to solve the problem
         backtrack(i, curStr) or dfs
             i (int): index of elment in digits
             curStr (str): will add char along the depth of the tree
+            add curStr to have more readability and eaiser to logic inside the dfs function
         build maping between digit string with and char string
         each layer is possible elemnt from the i index of digit
         res (list): collect curStr when base case
