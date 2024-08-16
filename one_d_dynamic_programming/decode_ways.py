@@ -11,15 +11,19 @@ strategy to solve the problem
 """
 class Solution:
     def numDecodings(self, s: str) -> int:
-        #check for invalid case
-        if s[0] == "0":
-            return 0
+        dp = {}
+        return self._dp_helper(s, dp)
 
-        dp = [0] * (len(s)+1)
-        dp[0], dp[1] = 1, 1
-        for i in range(2, len(s)+1):
-            if 1 <= int(s[i-1:i]) <= 9:
-                dp[i] += dp[i-1]
-            if 10 <= int(s[i-2:i]) <= 26:
-                dp[i] += dp[i-2]
-        return dp[-1]
+    def _dp_helper(self, data, dp):
+        # Base Case 1: Empty string
+        if not data:
+            return 1
+        first_call, second_call = 0, 0
+        if data in dp:
+            return dp[data]
+        if 1 <= int(data[:1]) <= 9:
+            first_call = self._dp_helper(data[1:], dp)
+        if 10 <= int(data[:2]) <= 26:
+            second_call = self._dp_helper(data[2:], dp)
+        dp[data] = first_call + second_call
+        return dp[data]

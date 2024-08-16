@@ -7,14 +7,33 @@ strategy to solve the problem
         return min(dp[-1], dp[-2]) #you can reach the last index by the last index or the second last
 
 """
+
+"""
+Recursive style with depth first search and memorization
+    We must draw decision tree to see dfs threverse the tree and collect cost
+"""
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-        #edge case
-        if len(cost) <= 2:
+
+        @cache
+        def dfs(i):
+            if i >= len(cost):
+                return 0
+            return cost[i] + min(dfs(i+1), dfs(i+2))
+        return min(dfs(0), dfs(1)) #start from 0, or 1
+    
+
+"""
+Dynamic Programing style:
+    dynamic programing style is also derived from dfs search problem
+"""
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+
+        n = len(cost)
+        if n <= 2:
             return min(cost)
-        #dp
-        dp = [0] * len(cost)
-        dp[0], dp[1] = cost[0], cost[1] #because we can start at index 0 or index 1
-        for i in range(2, len(cost)):
-            dp[i] = min(dp[i-1]+cost[i], cost[i]+dp[i-2])
-        return min(dp[-1], dp[-2])
+        cur, prev = 0, 0
+        for c in cost:
+            cur, prev = c + min(cur, prev), cur
+        return min(cur, prev)
