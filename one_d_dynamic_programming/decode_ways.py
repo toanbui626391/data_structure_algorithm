@@ -9,21 +9,26 @@ strategy to solve the problem
         we need a dp of length len(s) + 1 because dp is a function of len of s and we take substring operation 
 
 """
+"""
+Recursive and Memorization style
+    Problem: count number of decode way -> count number of leaf which reach to the end of the string
+    You need to draw decision tree which we traverse the string
+        For each node i there are one or two way to decode it: dfs(i) = dfs(i+1) + dfs(i+2)
+
+"""
+
+
+
 class Solution:
     def numDecodings(self, s: str) -> int:
-        dp = {}
-        return self._dp_helper(s, dp)
-
-    def _dp_helper(self, data, dp):
-        # Base Case 1: Empty string
-        if not data:
-            return 1
-        first_call, second_call = 0, 0
-        if data in dp:
-            return dp[data]
-        if 1 <= int(data[:1]) <= 9:
-            first_call = self._dp_helper(data[1:], dp)
-        if 10 <= int(data[:2]) <= 26:
-            second_call = self._dp_helper(data[2:], dp)
-        dp[data] = first_call + second_call
-        return dp[data]
+        @cache
+        def dfs(sub_string):
+            if not sub_string:
+                return 1
+            first_case, second_case = 0, 0
+            if 1 <= int(sub_string[:1]) <= 9:
+                first_case = dfs(sub_string[1:])
+            if 10 <= int(sub_string[:2]) <= 26:
+                second_case = dfs(sub_string[2:])
+            return first_case + second_case
+        return dfs(s)

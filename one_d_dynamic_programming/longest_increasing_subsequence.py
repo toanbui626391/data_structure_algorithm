@@ -9,6 +9,21 @@ strategy to solve the problem
         dp[i] = max(dp[i], dp[j]+1). #
         dp[j] is the right index of subarray
 """
+
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        @cache
+        def dfs(i) -> int:
+            if i >= len(nums):
+                return 0
+            l = 1 #find depth of the tree
+            for j in range(i+1, len(nums)):
+                if nums[j] > nums[i]:
+                    l = max(l, 1 + dfs(j))
+            return l
+        return max([dfs(i) for i in range(len(nums))])
+    
+
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
 

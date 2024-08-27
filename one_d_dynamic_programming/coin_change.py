@@ -20,3 +20,22 @@ class Solution:
             for j in range(c, amount+1):
                 dp[j] = min(dp[j], dp[j-c] + 1)
         return -1 if dp[-1] == float("inf") else dp[-1] #if coins have not make up the amount then return -1 else return dp[-1]
+"""
+second solution:
+dfs(memo, n:
+    memo: dict to remember result
+    n: amount of money need to
+"""    
+
+from math import inf, isinf
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        @cache
+        def dfs(total):
+            if total == amount:
+                return 0
+            if total > amount:
+                return inf
+            return min(1+dfs(total+c) for c in coins)
+        res = dfs(0)
+        return -1 if isinf(res) else res

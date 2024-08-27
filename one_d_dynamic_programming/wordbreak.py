@@ -9,6 +9,25 @@ strategy to solve the problem
         condition to be a word is the left index is the right index of other word and that word in wordDict
 """
 
+"""
+Recursion and Memorization style
+    We need to understand decision tree and then code recursive for backtracking
+
+"""
+
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        @cache
+        def dfs(substring):
+            if not substring:
+                return True
+            for w in wordDict:
+                if substring.startswith(w):
+                    if dfs(substring[len(w):]):
+                        return True
+            return False
+        return dfs(s)
+
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         dp = [True] + [False] * len(s)
