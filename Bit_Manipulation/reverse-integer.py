@@ -1,6 +1,6 @@
 class Solution:
     def reverse(self, x: int) -> int:
-        resp = 0
+        res = 0
         #to handle sign of integer
         sign = 1 if x >= 0 else -1
 
@@ -10,12 +10,12 @@ class Solution:
 
         x = abs(x) #remove sign
         while x > 0:
+            #compute remainder
             remainder = x % 10
 
-            if resp > MAX_VALUE_RES or (resp == MAX_VALUE_RES and remainder > MAX_VALUE_REMAINDER):
+            if res > MAX_VALUE_RES or (res == MAX_VALUE_RES and remainder >= MAX_VALUE_REMAINDER):
                 return 0
 
-            resp = (resp*10) + (x % 10)
-            x //= 10
+            res , x = (res*10) + (x % 10), x//10
 
-        return resp * sign
+        return res * sign
