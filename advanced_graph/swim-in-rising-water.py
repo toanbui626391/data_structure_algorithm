@@ -18,7 +18,6 @@ class Solution:
             for dx, dy in directions:
                 r_dx, c_dy = r + dx, c + dy
                 if 0 <= r_dx < n and 0 <= c_dy < n and (r_dx, c_dy) not in visited:
-                    print("r_dx, c_dy: ", r_dx, c_dy)
                     heappush(pq, (max(grid[r_dx][c_dy], min_time), r_dx, c_dy))
                     visited.add((r_dx, c_dy))
         
