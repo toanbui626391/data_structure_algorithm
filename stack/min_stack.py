@@ -1,10 +1,13 @@
-#problem understanding
-    #Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
-
-#strategy to solve the problem
-    #maintain two stack (normal stack and min stack)
-        #stack to keep elements
-        #minStack to keep current min value of stack. in this way, went pop or push any value it will allways keep the information about min value of stack
+# problem understanding
+#     Design a stack that supports push, pop, top, and retrieving the minimum
+#     element in constant time.
+#
+# strategy to solve the problem
+#     maintain two stack (normal stack and min stack)
+#         stack to keep elements
+#         minStack to keep current min value of stack. in this way, went pop or
+#         push any value it will allways keep the information about min value
+#         of stack
 #################################reference solution
 class MinStack:
     def __init__(self):
