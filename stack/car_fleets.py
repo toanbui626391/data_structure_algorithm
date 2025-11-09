@@ -8,7 +8,8 @@
         #stack (time to complete remaining range): 
             #number of remain element is the number of carfleet form
         #why using if in this case:
-            #because we only watn to pop car which is forming carfleet after the first car in the carfleet
+            # because we only watn to pop car which is forming carfleet after
+            # the first car in the carfleet
 ##########################################reference solution
 from typing import List
 class Solution:
@@ -23,7 +24,8 @@ class Solution:
         return len(stack)
     
 #######################################reference solution v2
-#use stack to keep time the last one is the last car fleet time. therefore len(stack) is number of carfleet form
+# use stack to keep time the last one is the last car fleet time.
+# therefore len(stack) is number of carfleet form
 class Solution:
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
         pair = sorted([(p, s) for p, s in zip(position, speed)], reverse=True)
