@@ -1,24 +1,24 @@
-#problem understand
-    #Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
-        #Each row must contain the digits 1-9 without repetition.
-        #Each column must contain the digits 1-9 without repetition.
-        #Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+"""
+Determine if a 9x9 Sudoku board is valid. Only
+filled cells need to be validated:
+  - Each row must contain digits 1-9 without repeat.
+  - Each column must contain digits 1-9 without repeat.
+  - Each 3x3 sub-box must contain 1-9 without repeat.
 
-    #check duplicate for a collection -> using hash set
+Example:
+  Input:  valid 9x9 board
+  Output: True or False
+"""
 
-#solution strategy:
-    # row (defaultdict(set)): to collect elements in each row
-    # col (defaultdict(set)): to collect elements in each col
-    # sqaure (defaultdict(set)): to collect elements in sub square
-    # how to index collection for row, col and sub sqare
-        #for col and row use col and row index of matrix
-        #for index of sub squre use key (r//3, c//3)
-    # integer operators is: //
-#######################################solution reference
 from collections import defaultdict
 from typing import List
+
+
 class Solution:
-    def isValidSudoku(self, board: List[List[str]]) -> bool:
+    def isValidSudoku(
+        self, board: List[List[str]]
+    ) -> bool:
+        # Sets indexed by row, col, or sub-square key.
         row = defaultdict(set)
         col = defaultdict(set)
         square = defaultdict(set)
@@ -26,12 +26,14 @@ class Solution:
             for c in range(9):
                 if board[r][c] == ".":
                     continue
-                if (board[r][c] in row[r] or
-                    board[r][c] in col[c] or
-                    board[r][c] in square[(r//3, c//3)]
+                # Reject if the digit already appears.
+                if (
+                    board[r][c] in row[r]
+                    or board[r][c] in col[c]
+                    or board[r][c] in square[(r // 3, c // 3)]
                 ):
                     return False
                 row[r].add(board[r][c])
                 col[c].add(board[r][c])
-                square[(r//3, c//3)].add(board[r][c])
+                square[(r // 3, c // 3)].add(board[r][c])
         return True

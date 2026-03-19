@@ -1,25 +1,33 @@
 """
-strategy to solve the problem
-    problem: find the lowest common ancestor in binary search tree
-        binary search tree: is binary tree which left child < root while right child > root
-        binary search tree help search number faster
-    why:
-        root is common ancestor of p and q if p.val <= root.val <= q.val
-        so continue to search if both p and q is the same side of current node 
-    variables:
-        cur (TreeNode): to move between node from root
+Given a BST and two nodes p and q, find their
+lowest common ancestor (the deepest node that is
+an ancestor of both p and q).
 
+Example:
+  Input:  root=[6,2,8,0,4,7,9], p=2, q=8
+  Output: 6
+
+Constraints:
+  BST ordering lets us decide which side to descend.
 """
 
+
 class Solution:
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+    def lowestCommonAncestor(
+        self,
+        root: "TreeNode",
+        p: "TreeNode",
+        q: "TreeNode",
+    ) -> "TreeNode":
+        curr = root
 
-        cur = root
-
-        while cur:
-            if p.val > cur.val and q.val > cur.val:
-                cur = cur.right
-            elif p.val < cur.val and q.val < cur.val:
-                cur = cur.left
+        while curr:
+            # Both nodes are in the right subtree.
+            if p.val > curr.val and q.val > curr.val:
+                curr = curr.right
+            # Both nodes are in the left subtree.
+            elif p.val < curr.val and q.val < curr.val:
+                curr = curr.left
+            # Nodes split across curr; curr is the LCA.
             else:
-                return cur
+                return curr

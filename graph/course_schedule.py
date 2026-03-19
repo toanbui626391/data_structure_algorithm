@@ -1,45 +1,52 @@
 """
-strategy to solve the problem
-    problem:
-        given number of course (int) ad a list of list present prerequisites. Check that can we complete all course. Or we do not have circle graph
-    why:
-        using dfs
-            build preMap {course: [courses_to_completed]}
-            check have circle from course or not
-            #after check we have to remove course from visited and node is not circle
+Given numCourses and a list of prerequisite pairs,
+determine if you can finish all courses (i.e., the
+dependency graph is acyclic).
 
+Example:
+  Input:  numCourses=2, prerequisites=[[1,0]]
+  Output: True
+
+Constraints:
+  DFS with a visiting set detects cycles in the prereq graph.
 """
+
 from typing import List
+
+
 class Solution:
-    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        # init preMap
-        preMap = {i: [] for i in range(numCourses)}
+    def canFinish(
+        self,
+        numCourses: int,
+        prerequisites: List[List[int]],
+    ) -> bool:
+        # Map each course to its list of prerequisites.
+        pre_map = {idx: [] for idx in range(numCourses)}
 
-        #build premap
-        for crs, pre in prerequisites:
-            preMap[crs].append(pre)
+        for course, prereq in prerequisites:
+            pre_map[course].append(prereq)
 
+        # Tracks courses currently on the DFS path (cycle check).
         visiting = set()
 
-        def dfs(crs):
-            #if visited node more than once return False
-            if crs in visiting:
+        def dfs(course):
+            # Seeing the same node twice means a cycle exists.
+            if course in visiting:
                 return False
-            #a course is no prerequisite can complete
-            if preMap[crs] == []:
+            # No prerequisites; this course can be completed.
+            if pre_map[course] == []:
                 return True
 
-            visiting.add(crs)
-            #if one of the child node can not be complete than the parent node also can not be completet
-            for pre in preMap[crs]:
-                if not dfs(pre):
+            visiting.add(course)
+            for prereq in pre_map[course]:
+                if not dfs(prereq):
                     return False
-            #remove course from visited for next course check and mark course can be completed 
-            visiting.remove(crs)
-            preMap[crs] = [] #update empty list for node which it not cycle so that we will not process that node again
+            # Remove from path; mark prerequisites as cleared.
+            visiting.remove(course)
+            pre_map[course] = []
             return True
-        #if one of the course can not complete return False, all course complete return True
-        for c in range(numCourses):
-            if not dfs(c):
+
+        for course in range(numCourses):
+            if not dfs(course):
                 return False
         return True

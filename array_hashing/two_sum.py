@@ -1,22 +1,40 @@
+"""
+Given an array of integers nums and an integer
+target, return indices of the two numbers such
+that they add up to target.
+
+You may assume that each input would have exactly
+one solution, and you may not use the same element
+twice. You can return the answer in any order.
+
+Example:
+  Input:  nums=[2,7,11,15], target=9
+  Output: [0,1]
+
+Example:
+  Input:  nums=[3,2,4], target=6
+  Output: [1,2]
+
+Example:
+  Input:  nums=[3,3], target=6
+  Output: [0,1]
+"""
+
+
 def twoSum(nums: list[int], target: int) -> list[int]:
-    # Dictionary to store the values we've seen and their exact indices.
-    # Format: {number: index}
+    # Store seen values and indices for O(1) lookup.
     seen = {}
-    
-    # enumerate() gives us both the index (i) and the value (num) at the same time
+
     for i, num in enumerate(nums):
-        # Calculate what number we need to hit the target
+        # Calculate what complement is needed.
         complement = target - num
-        
-        # Check if we have already seen that required number
+
+        # Return both indices if complement was seen.
         if complement in seen:
-            # If yes, return the index of the complement and our current index
             return [seen[complement], i]
-            
-        # If not, add the current number and its index to our dictionary
-        # so it can be found by future numbers
+
+        # Record this number's index for future lookups.
         seen[num] = i
-        
-    # Return an empty list if no match is found
-    # (Note: LeetCode usually guarantees exactly one valid solution)
+
+    # No valid pair found.
     return []

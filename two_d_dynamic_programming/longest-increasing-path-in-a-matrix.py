@@ -1,27 +1,59 @@
+"""
+Given an m x n matrix, return the length of
+the longest strictly increasing path. You may
+move in four directions (no diagonals).
+
+Example:
+  Input:  matrix=[[9,9,4],[6,6,8],[2,1,1]]
+  Output: 4
+
+Constraints:
+  DFS with memoization; each cell's result only
+  depends on neighbors with strictly greater
+  values, so no visited set is needed.
+"""
+
+from typing import List
+
+
 class Solution:
-    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
-        ROWS, COLS = len(matrix), len(matrix[0])  # Get the number of rows and columns in the matrix
-        memory = {}  # Initialize a memoization dictionary
+    def longestIncreasingPath(
+        self, matrix: List[List[int]]
+    ) -> int:
+        ROWS = len(matrix)
+        COLS = len(matrix[0])
+        memo = {}
 
-        def dfs(r, c, prevVal):
-            # Base cases: Check if out of bounds or current cell value is not increasing
-            if r < 0 or r == ROWS or c < 0 or c == COLS or matrix[r][c] <= prevVal:
+        def dfs(r, c, prev_val):
+            if (
+                r < 0
+                or r == ROWS
+                or c < 0
+                or c == COLS
+                or matrix[r][c] <= prev_val
+            ):
                 return 0
-            # Memoization check: If result for current cell already computed, return it
-            if (r, c) in memory:
-                return memory[(r, c)]
+            if (r, c) in memo:
+                return memo[(r, c)]
 
-            ans = 1  # Initialize the answer to 1 (minimum length of increasing path)
-            # Explore all four directions from the current cell
-            ans = max(ans, 1 + dfs(r + 1, c, matrix[r][c]))  # Down
-            ans = max(ans, 1 + dfs(r - 1, c, matrix[r][c]))  # Up
-            ans = max(ans, 1 + dfs(r, c + 1, matrix[r][c]))  # Right
-            ans = max(ans, 1 + dfs(r, c - 1, matrix[r][c]))  # Left
-            memory[(r, c)] = ans  # Memoize the result for the current cell
-            return ans  # Return the length of the longest increasing path starting from the current cell
+            current_val = matrix[r][c]
+            best = 1
+            best = max(
+                best, 1 + dfs(r + 1, c, current_val)
+            )
+            best = max(
+                best, 1 + dfs(r - 1, c, current_val)
+            )
+            best = max(
+                best, 1 + dfs(r, c + 1, current_val)
+            )
+            best = max(
+                best, 1 + dfs(r, c - 1, current_val)
+            )
+            memo[(r, c)] = best
+            return best
 
-        # Iterate through each cell in the matrix and call the DFS function
         for r in range(ROWS):
             for c in range(COLS):
-                dfs(r, c, -1)  # Start DFS from each cell with initial previous value -1
-        return max(memory.values())  # Return the maximum value stored in the memoization dictionary
+                dfs(r, c, -1)
+        return max(memo.values())

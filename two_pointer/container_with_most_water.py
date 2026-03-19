@@ -1,19 +1,18 @@
-#problem understanding
-    #You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i])
-    #Find two lines that together with the x-axis form a container, such that the container contains the most water.
-    #Return the maximum amount of water a container can store.
+"""
+Given an integer array height of length n, find
+two lines that form a container holding the most
+water. Return the maximum amount of water.
 
-#strategy to solve the problem:
-    #brute force solution: O(n^2) two inner loop to check all combination
-    #two pointer solution: O(n)
-        #area = (r-l) * min(height[l], height[r])
-        #we want maximum posible of (r-l)
-        #we want to check all position solution of max height[l] and height[r]. Therefore:
-            # if height[l] >= height[r]: #check combination of max height left
-                # r += 1
-            # else: #check combination of max height right
-                # l -= 1
-            #therefore, we can reduce number of operation to check to O(n)
+Example:
+  Input:  height=[1,8,6,2,5,4,8,3,7]
+  Output: 49
+
+Constraints:
+  area = (r - l) * min(height[l], height[r])
+"""
+
+from typing import List
+
 
 class Solution:
     def maxArea(self, height: List[int]) -> int:
@@ -21,11 +20,15 @@ class Solution:
             return 0
 
         max_area = 0
-        l, r = 0, len(height) - 1
-        while l < r:
-            max_area = max(max_area, (r-l)*min(height[l], height[r]))
-            if height[l] >= height[r]:
-                r -= 1
+        left, right = 0, len(height) - 1
+        while left < right:
+            max_area = max(
+                max_area,
+                (right - left) * min(height[left], height[right]),
+            )
+            # Move the shorter wall to find a potentially taller one.
+            if height[left] >= height[right]:
+                right -= 1
             else:
-                l += 1
+                left += 1
         return max_area

@@ -1,32 +1,40 @@
 """
-strategy to solve the problem
-    why:
-        using dfs(i, cur, total)
-            i is the index of element in candiates which is consider
-            cur: the current element in consider
-            total: the current sum value in consider
-        combination: we can choose the same element multiple time to form a combination
-        
+Given an array of distinct integers candidates and
+a target integer, return all unique combinations
+where the chosen numbers sum to target. The same
+number may be chosen unlimited times.
 
+Example:
+  Input:  candidates=[2,3,6,7], target=7
+  Output: [[2,2,3],[7]]
+
+Constraints:
+  DFS with index prevents going backward (avoids permutations).
 """
-class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        res = []
 
-        def dfs(i, cur, total):
-            #base case
+from typing import List
+
+
+class Solution:
+    def combinationSum(
+        self, candidates: List[int], target: int
+    ) -> List[List[int]]:
+        result = []
+
+        def dfs(idx, current, total):
+            # Found a valid combination.
             if total == target:
-                res.append(cur.copy())
+                result.append(current.copy())
                 return
-            #base case to stop recursion
-            if i >= len(candidates) or total > target:
+            # Exceeded target or exhausted candidates.
+            if idx >= len(candidates) or total > target:
                 return
-            #add element, and continue add that element
-            cur.append(candidates[i])
-            dfs(i, cur, total + candidates[i]) #choose the same element multiple time
-            #do not add element and continue with next element
-            cur.pop()
-            dfs(i + 1, cur, total)
+            # Branch 1: include candidates[idx] again.
+            current.append(candidates[idx])
+            dfs(idx, current, total + candidates[idx])
+            # Branch 2: skip to the next candidate.
+            current.pop()
+            dfs(idx + 1, current, total)
 
         dfs(0, [], 0)
-        return res
+        return result

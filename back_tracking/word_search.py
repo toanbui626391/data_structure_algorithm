@@ -1,49 +1,60 @@
 """
-strategy to solve the problem
-    problem
-        given a board m*n of char, check exist workd
-        word is contruct by adjacent char, same char cell may not be used more than one
-    why
-        dfs(i, x, y):
-            i (int): index of element in word
-            x, y (int): index of col and row in board
-        recursive search from the start of word at every cell of board
-            #when to return False, invalid index of x, y of board and word[i] != board[x][y]
-            #when to return True i == len(word) - 1 or we have finished all the search of letter in word
+Given an m x n grid of characters and a word,
+return true if the word exists in the grid.
+The word must be formed by adjacent cells; the
+same cell may not be used more than once.
+
+Example:
+  Input:  board=[["A","B","C","E"],["S","F","C","S"],
+          ["A","D","E","E"]], word="ABCCED"
+  Output: True
+
+Constraints:
+  Mark cells visited during DFS; restore after backtracking.
 """
 
+from typing import List
+
+
 class Solution:
-    def exist(self, board: List[List[str]], word: str) -> bool:
-        
-        if not board: 
-            # Quick response for empty board
+    def exist(
+        self, board: List[List[str]], word: str
+    ) -> bool:
+        if not board:
             return False
-        
-        h, w = len(board), len(board[0])
-      
-        def dfs_search(idx: int, x: int, y: int) -> bool:
+
+        num_rows = len(board)
+        num_cols = len(board[0])
+
+        def dfs_search(idx: int, row: int, col: int) -> bool:
             """
-            check the current letter in word equal to current letter in board
+            Return True if word[idx:] can be matched starting
+            at board[row][col].
             """
-            
-            if x < 0 or x == w or y < 0 or y == h or word[idx] != board[y][x]:
-                # Reject if out of boundary, or current grid cannot match the character word[idx]
+            if (
+                col < 0
+                or col == num_cols
+                or row < 0
+                or row == num_rows
+                or word[idx] != board[row][col]
+            ):
                 return False
-            if idx == len(word) - 1: 
-                # Accept when we match all characters of word during DFS
+            if idx == len(word) - 1:
                 return True
-            cur = board[y][x]      
-            # mark as '#' to avoid repeated traversal
-            board[y][x] = '#'            
-            # visit next four neighbor grids
+            saved = board[row][col]
+            # Temporarily mark cell to prevent reuse.
+            board[row][col] = '#'
             found = (
-                dfs_search(idx + 1, x + 1, y) or #right
-                dfs_search(idx + 1, x - 1, y) or #left
-                dfs_search(idx + 1, x, y + 1) or  #below
-                dfs_search(idx + 1, x, y - 1)) #adobe
-            # recover original grid character after DFS is completed
-            board[y][x] = cur
+                dfs_search(idx + 1, row, col + 1)
+                or dfs_search(idx + 1, row, col - 1)
+                or dfs_search(idx + 1, row + 1, col)
+                or dfs_search(idx + 1, row - 1, col)
+            )
+            board[row][col] = saved
             return found
-        # ------------------------------------------------------
-        return any(dfs_search(0, x, y) for y in range(h) for x in range(w)) #have to check all possible solution
-        
+
+        return any(
+            dfs_search(0, row, col)
+            for row in range(num_rows)
+            for col in range(num_cols)
+        )

@@ -1,42 +1,37 @@
-#understand the problem
+"""
+Given a rotated sorted integer array nums and a
+target, return the index of target, or -1.
 
-#strategy to solve the problem
-    #goal: search and return index of a target in a rotated sorted array
+Example:
+  Input:  nums=[4,5,6,7,0,1,2], target=0
+  Output: 4
 
-    #why:
-        #it is a rotated sorted array. we do not know pivot point but we know there are two increase array.
-        #using binary search to use above feature
-        #for each num[mid] we have to know which portion of array we are in
-        #when we know what portion of array we condition to find which way to go using binary search
+Constraints:
+  Determine which sorted half mid falls in, then narrow.
+"""
 
-        #the key is to know both target and mid are in which portion. and relative between mid and target
-            #if target < nums[l]: target have to be in the right
-            #if target > nums[r]: target have to be in the left
-
-    #variable:
-        #l, r (int): to do binary search and keep track of search area
-        #mid (int): to keep the searching index
-#########################################reference to solution
 from typing import List
+
+
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
-        l, r = 0, len(nums) - 1
+        left, right = 0, len(nums) - 1
 
-        while l <= r:
-            mid = (l + r) // 2
+        while left <= right:
+            mid = (left + right) // 2
             if target == nums[mid]:
                 return mid
 
-            # left sorted portion
-            if nums[l] <= nums[mid]:
-                if target > nums[mid] or target < nums[l]:
-                    l = mid + 1
+            # Check if mid is in the left sorted portion.
+            if nums[left] <= nums[mid]:
+                if target > nums[mid] or target < nums[left]:
+                    left = mid + 1
                 else:
-                    r = mid - 1
-            # right sorted portion
+                    right = mid - 1
+            # Mid is in the right sorted portion.
             else:
-                if target < nums[mid] or target > nums[r]:
-                    r = mid - 1
+                if target < nums[mid] or target > nums[right]:
+                    right = mid - 1
                 else:
-                    l = mid + 1
+                    left = mid + 1
         return -1

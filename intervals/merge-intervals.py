@@ -1,19 +1,37 @@
+"""
+Given an array of intervals, merge all
+overlapping intervals and return the result.
+
+Example:
+  Input:  intervals=[[1,3],[2,6],[8,10],[15,18]]
+  Output: [[1,6],[8,10],[15,18]]
+
+Constraints:
+  Sort by start; track the last merged interval
+  and extend its end when overlap is found.
+"""
+
+from typing import List
+
+
 class Solution:
-    def merge(self, intervals: 'List[Interval]') -> 'List[Interval]':
-        if not intervals: return []
+    def merge(
+        self, intervals: List[List[int]]
+    ) -> List[List[int]]:
+        if not intervals:
+            return []
         intervals.sort()
 
-        unique = []
+        merged = []
         last = intervals[0]
-        for cur in intervals:
-            #find overlap and merge
-            if cur[0] <= last[1]:
-                last[1] = max(last[1], cur[1])
-            else: #no overlapp
-                #append last and update last to curr
-                unique.append(last)
-                last = cur
-        #append final last
-        unique.append(last)
-        return unique
-                    
+        for curr in intervals:
+            # Overlap: extend last interval's end.
+            if curr[0] <= last[1]:
+                last[1] = max(last[1], curr[1])
+            else:
+                # No overlap: save last, advance.
+                merged.append(last)
+                last = curr
+
+        merged.append(last)
+        return merged

@@ -1,43 +1,41 @@
-#strategy to solve the problem:
-    #why:
-        #using slow and fast strategy to find middle. slow.next will be head of the second half
-            #slow behind and move one while fast is first and move twice. start with slow, fast = head, head.next
-        #reverse the second half. remember to change from slow.next = None
-        #we do need temp1, temp2 for merge two linked list together. because we we need to update first and second for next iteration
+"""
+Given the head of a linked list L0->L1->...->Ln,
+reorder it to L0->Ln->L1->Ln-1->... in-place.
 
-    #variables:
-        #slow and fast (ListNode): to find middle node
+Example:
+  Input:  head=[1,2,3,4]
+  Output: [1,4,2,3]
 
-    #error note:
-        #condition to stop slow, fast strategy
-            #while fast and fast.next
-        #condition for merge. because with slow and fast pointer second half is always smaller than first half
-            #while second:
-        #rember to complete the first half after find middle
-            #slow.next = None
-        #we do need temp1, temp2 for merge two linked list together. because we we need to update first and second for next iteration
+Constraints:
+  Find mid, reverse second half, then interleave both halves.
+"""
+
 
 class Solution:
-    def reorderList(self, head: ListNode) -> None:
-        # find middle
-        slow, fast = head, head.next
+    def reorderList(self, head: "ListNode") -> None:
+        # Find the middle using slow/fast pointers.
+        slow = head
+        fast = head.next
         while fast and fast.next:
             slow = slow.next
             fast = fast.next.next
 
-        # reverse second half
+        # Reverse the second half in-place.
         second = slow.next
         prev = slow.next = None
         while second:
-            tmp = second.next
+            temp = second.next
             second.next = prev
             prev = second
-            second = tmp
+            second = temp
 
-        # merge two halfs
-        first, second = head, prev
+        # Interleave first and reversed second halves.
+        first = head
+        second = prev
         while second:
-            tmp1, tmp2 = first.next, second.next
+            tmp1 = first.next
+            tmp2 = second.next
             first.next = second
             second.next = tmp1
-            first, second = tmp1, tmp2
+            first = tmp1
+            second = tmp2

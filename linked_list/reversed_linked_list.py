@@ -1,41 +1,28 @@
-#strategy to solve the problem
-    #why:
-        #for each node we just need to change direction of linked list
-        #for each iteration we need prev, curr and temp node to do it
-        #start with prev, curr = None, head. iterate through linked list and change direction of current node
-    #variables:
-        #prev, curr, temp (ListNode)
-    #error notes:
-        #curr = temp. because curr.next have been change before
-
-#############################reference solution
 """
-linked list:
-    singly linked list: 
-        a list with multiple node each node linked together with pointer (node.next)
-        node (val, next)
-        can only move in one direction
-    doubly linked list
-        like singly linked list with node (val, prev, next) therefore, we can move backford or forward
+Given the head of a singly linked list, reverse
+the list and return the reversed list's head.
 
-reverse a linked list:
-    #we just need to change curr.next to prev node. but we need a temp variable to do it
-    #change direction of current node
-    temp = curr.next
-    cur.next = prev
-    #prepare for next iteration
-    prev = curr
-    curr = temp
+Example:
+  Input:  head=[1,2,3,4,5]
+  Output: [5,4,3,2,1]
+
+Constraints:
+  Reverse in-place by redirecting each node's next pointer.
 """
+
+
 class Solution:
-    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        prev, curr = None, head
+    def reverseList(
+        self, head: "Optional[ListNode]"
+    ) -> "Optional[ListNode]":
+        prev = None
+        curr = head
 
         while curr:
-            #change direction
+            # Save next before overwriting the pointer.
             temp = curr.next
             curr.next = prev
-            #update for next iteration
+            # Advance both pointers for the next iteration.
             prev = curr
             curr = temp
 

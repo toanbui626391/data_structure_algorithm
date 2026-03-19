@@ -1,31 +1,41 @@
-# Definition for an interval.
-# class Interval(object):
-#     def __init__(self, s=0, e=0):
-#         self.start = s
-#         self.end = e
+"""
+Given a list of meeting intervals, return the
+minimum number of conference rooms required.
+
+Example:
+  Input:  intervals=[[0,30],[5,10],[15,20]]
+  Output: 2
+
+Constraints:
+  Min-heap of end times; pop rooms that finish
+  before the next meeting starts.
+"""
 
 from heapq import heappush, heappop
+from typing import List
 
 
-class Solution(object):
-    def minMeetingRooms(self, intervals):
-        """
-        :type intervals: List[Interval]
-        :rtype: int
-        """
-        SI = sorted(intervals, key=lambda it: (it.start, it.end))  # sorted intervals
+class Solution:
+    def minMeetingRooms(
+        self, intervals: List[List[int]]
+    ) -> int:
+        # Sort by start time to process in order.
+        sorted_intervals = sorted(
+            intervals, key=lambda it: (it.start, it.end)
+        )
 
-        ret = 0
-        heap = []  # contains end times
+        result = 0
+        # Heap holds end times of active meetings.
+        end_heap = []
 
-        for it in SI:
-            start, end = it.start, it.end
+        for interval in sorted_intervals:
+            start, end = interval.start, interval.end
 
-            while heap and heap[0] <= start:
-                heappop(heap)
+            # Free rooms whose meetings have ended.
+            while end_heap and end_heap[0] <= start:
+                heappop(end_heap)
 
-            heappush(heap, end)
+            heappush(end_heap, end)
+            result = max(result, len(end_heap))
 
-            ret = max(ret, len(heap))
-
-        return ret
+        return result

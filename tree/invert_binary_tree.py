@@ -1,19 +1,26 @@
 """
-strategy to solve the problem:
-    problem: invert binary three. 
-        binary three (val, left, right)
-    why using dfs:
-        we can do recursive and invert three (convert left to right and right to left)
+Given the root of a binary tree, invert the tree
+and return its root.
 
+Example:
+  Input:  root=[4,2,7,1,3,6,9]
+  Output: [4,7,2,9,6,3,1]
+
+Constraints:
+  Swap left and right children at every node recursively.
 """
+
+
 class Solution:
-    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        #base case, when to stop
+    def invertTree(
+        self, root: "Optional[TreeNode]"
+    ) -> "Optional[TreeNode]":
+        # An empty subtree is already inverted.
         if not root:
             return None
-        #invert tree at one node
+        # Swap left and right children at this node.
         root.left, root.right = root.right, root.left
-        #recursively with next left and right node
+        # Recurse into both subtrees.
         self.invertTree(root.left)
         self.invertTree(root.right)
-        return root #return root after all recursively invert subtree
+        return root

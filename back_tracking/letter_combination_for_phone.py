@@ -1,24 +1,24 @@
 """
-strategy to solve the problem
-    problem: 
-        given a string of int, find all combination of letter
-        combination will have the same lengh of list. Example, [1, 2] and 
-    why 
-        backtrack(i, curStr) or dfs
-            i (int): index of elment in digits
-            curStr (str): will add char along the depth of the tree
-            add curStr to have more readability and eaiser to logic inside the dfs function
-        build maping between digit string with and char string
-        each layer is possible elemnt from the i index of digit
-        res (list): collect curStr when base case
+Given a string of digits, return all possible
+letter combinations that the digits could represent
+on a phone keypad. Return an empty list for "".
 
+Example:
+  Input:  digits="23"
+  Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+
+Constraints:
+  DFS at each digit level adds one character per branch.
 """
+
+from typing import List
+
 
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
-        res = []
-        #build map between int string and char string
-        digitToChar = {
+        result = []
+        # Maps digit characters to their keypad letters.
+        digit_to_char = {
             "2": "abc",
             "3": "def",
             "4": "ghi",
@@ -29,15 +29,15 @@ class Solution:
             "9": "wxyz",
         }
 
-        def backtrack(i, curStr):
-            #base case
-            if i == len(digits):
-                res.append(curStr)
+        def backtrack(idx, current_string):
+            # All digits processed; record the combination.
+            if idx == len(digits):
+                result.append(current_string)
                 return
-            for c in digitToChar[digits[i]]: #all possible child
-                backtrack(i + 1, curStr + c) #next layer is nex string
+            for char in digit_to_char[digits[idx]]:
+                backtrack(idx + 1, current_string + char)
 
         if digits:
             backtrack(0, "")
 
-        return res
+        return result

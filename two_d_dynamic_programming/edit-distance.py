@@ -1,24 +1,40 @@
+"""
+Given two strings word1 and word2, return the
+minimum number of operations (insert, delete,
+replace) to convert word1 to word2.
+
+Example:
+  Input:  word1="horse", word2="ros"
+  Output: 3
+
+Constraints:
+  Memoized recursion at each (i,j) tries all three operations.
+"""
+
+
 class Solution:
     def minDistance(self, word1: str, word2: str) -> int:
-        dp = {}
-        
-        def getResult(i,j):
-            if i == len(word1) and j == len(word2):
-                return 0
-            if i == len(word1):  # Reached end of word1, Insert all left from word2
-                return len(word2) - j
-            if j == len(word2): # All chars of word2 are matched, Remove all left from word2
-                return len(word1) - i
+        memo = {}
 
-            if (i, j) not in dp:
-                if word1[i] == word2[j]:
-                    ans = getResult(i + 1, j + 1)
-                else: 
-                    insert = 1 + getResult(i, j + 1) #insert
-                    delete = 1 + getResult(i + 1, j) #delete
-                    replace = 1 + getResult(i + 1, j + 1) #replace
-                    ans = min(insert, delete, replace)
-                dp[(i, j)] = ans
-            return dp[(i, j)]
-        
-        return getResult(0,0)
+        def get_result(idx1, idx2):
+            if idx1 == len(word1) and idx2 == len(word2):
+                return 0
+            # Only insertions remain when word1 is exhausted.
+            if idx1 == len(word1):
+                return len(word2) - idx2
+            # Only deletions remain when word2 is exhausted.
+            if idx2 == len(word2):
+                return len(word1) - idx1
+
+            if (idx1, idx2) not in memo:
+                if word1[idx1] == word2[idx2]:
+                    answer = get_result(idx1 + 1, idx2 + 1)
+                else:
+                    insert = 1 + get_result(idx1, idx2 + 1)
+                    delete = 1 + get_result(idx1 + 1, idx2)
+                    replace = 1 + get_result(idx1 + 1, idx2 + 1)
+                    answer = min(insert, delete, replace)
+                memo[(idx1, idx2)] = answer
+            return memo[(idx1, idx2)]
+
+        return get_result(0, 0)

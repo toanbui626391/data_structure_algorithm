@@ -1,16 +1,33 @@
+"""
+Given two strings s and t, return the length of
+their longest common subsequence.
+
+Example:
+  Input:  s="abcde", t="ace"
+  Output: 3
+
+Constraints:
+  When characters match, extend; otherwise take the longer branch.
+"""
+
+from functools import cache
+
+
 class Solution:
-    def longestCommonSubsequence(self, s: str, t: str) -> int:
-        #compute the length of their longest common subsequence
-        #compute the max depth of the tree
+    def longestCommonSubsequence(
+        self, s: str, t: str
+    ) -> int:
         @cache
-        def f(i, j):
-            #add the depth of 1 when current char is the same and move to next char
-            if i < len(s) and j < len(t):
-                if s[i] == t[j]:
-                    return 1 + f(i+1, j+1)
-                #move right -> check next char of t, move down to check next char of s
-                return max(f(i, j+1), f(i+1, j))
-            #everything else do not have commem subsequence
+        def recurse(idx_s, idx_t):
+            if idx_s < len(s) and idx_t < len(t):
+                # Matching characters extend the subsequence by 1.
+                if s[idx_s] == t[idx_t]:
+                    return 1 + recurse(idx_s + 1, idx_t + 1)
+                # Try advancing either string independently.
+                return max(
+                    recurse(idx_s, idx_t + 1),
+                    recurse(idx_s + 1, idx_t),
+                )
             return 0
-        
-        return f(0, 0)
+
+        return recurse(0, 0)

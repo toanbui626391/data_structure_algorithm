@@ -1,21 +1,37 @@
+"""
+Given a 32-bit signed integer, reverse its
+digits. Return 0 if the result overflows.
+
+Example:
+  Input:  x=123
+  Output: 321
+
+Constraints:
+  Check for overflow before building each digit;
+  use 2^31 as the overflow boundary.
+"""
+
+
 class Solution:
     def reverse(self, x: int) -> int:
-        res = 0
-        #to handle sign of integer
+        result = 0
         sign = 1 if x >= 0 else -1
 
-        int_max_value = 1 << 31 #or 2^31, 2^31-1 is max valid 32 int value
-        MAX_VALUE_RES = int_max_value // 10 # max int if remove last degit
-        MAX_VALUE_REMAINDER = int_max_value % 10 # last degit value 
+        # 2^31; max valid 32-bit value is 2^31 - 1.
+        int_max = 1 << 31
+        max_head = int_max // 10
+        max_tail = int_max % 10
 
-        x = abs(x) #remove sign
+        x = abs(x)
         while x > 0:
-            #compute remainder
             remainder = x % 10
-
-            if res > MAX_VALUE_RES or (res == MAX_VALUE_RES and remainder >= MAX_VALUE_REMAINDER):
+            # Stop if adding this digit would overflow.
+            if result > max_head or (
+                result == max_head
+                and remainder >= max_tail
+            ):
                 return 0
+            result = (result * 10) + remainder
+            x //= 10
 
-            res , x = (res*10) + (x % 10), x//10
-
-        return res * sign
+        return result * sign

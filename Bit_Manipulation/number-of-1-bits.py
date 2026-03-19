@@ -1,10 +1,23 @@
+"""
+Given an unsigned integer, return the number
+of '1' bits (Hamming weight).
+
+Example:
+  Input:  n=11 (binary: 1011)
+  Output: 3
+
+Constraints:
+  Right-shift through all 32 bits, accumulating
+  the lowest bit each iteration.
+"""
+
+
 class Solution:
     def hammingWeight(self, n: int) -> int:
         count = 0
-        #right shift until n is 0
         while n != 0:
-            # n&1 last element is 0 or 1. if 1 return 1 else 0 return 0
+            # Lowest bit is 1 if n is odd.
             count += n & 1
-            #right shilt 1 position
+            # Shift right to examine next bit.
             n >>= 1
         return count

@@ -1,38 +1,40 @@
 """
-strategy to solve the problem:
-    problem:
+Houses are arranged in a circle, so the first and
+last houses are adjacent. Rob without hitting two
+adjacent houses; return the maximum amount.
 
-"""
-"""
-Recursive and Memorization style
-    add robFirst to track when to stop traverse the tree
-"""
-class Solution:
-    def rob(self, nums):
+Example:
+  Input:  nums=[2,3,2]
+  Output: 3
 
-        @cache
-        def dfs(i, robFirst):
-            n = len(nums)
-            if i >= n or (i >= n-1 and robFirst):
-                return 0
-            return max(nums[i]+dfs(i+2, robFirst), dfs(i+1, robFirst))
-        
-        if len(nums) < 2:
-            return max(nums)
-        return max(dfs(1, False), nums[0] + dfs(2, True))
-    
+Constraints:
+  Run house-robber twice: once skipping the last house,
+  once skipping the first house; take the maximum.
+"""
+
+from typing import List
+
 
 class Solution:
-    def rob(self, nums):
+    def rob(self, nums: List[int]) -> int:
 
-        def rob_helper(data):
-            n = len(data)
-            if n <= 2:
+        def rob_helper(data: List[int]) -> int:
+            num_houses = len(data)
+            if num_houses <= 2:
                 return max(data)
-            cur, prev = 0, 0
-            for n in data:
-                cur, prev = max(n+prev, cur), cur
-            return cur
+            current = 0
+            previous = 0
+            for value in data:
+                current, previous = (
+                    max(value + previous, current),
+                    current,
+                )
+            return current
+
         if len(nums) < 2:
             return max(nums)
-        return max(rob_helper(nums[:-1]), rob_helper(nums[1:]))
+        # Compare robbing [0..n-2] vs [1..n-1] to handle the circle.
+        return max(
+            rob_helper(nums[:-1]),
+            rob_helper(nums[1:]),
+        )

@@ -1,25 +1,33 @@
 """
-strategy to solve the problem
-    problem: validate the binary search tree
-        binary search tree: is binary tree which left subtree is smaller than root and root is smaller than right subTree
-    why:
-        using dfs(root, left_limit, right_limit)
-        on the left subTree we will know the right limit from root
-        on the right subTree we will know the left limmit from root
+Given the root of a binary tree, determine if it
+is a valid binary search tree.
+Left subtree nodes must be less than root; right
+subtree nodes must be greater than root.
 
+Example:
+  Input:  root=[2,1,3]
+  Output: True
+
+Constraints:
+  Each node must fall within an inherited valid range.
 """
+
+
 class Solution:
-    def isValidBST(self, root: TreeNode) -> bool:
-        def valid(node, left, right):
-            #base case, None tree is a valida BTS
-            if not node: 
+    def isValidBST(self, root: "TreeNode") -> bool:
+        def valid(node, left_limit, right_limit):
+            # An empty node is always a valid BST.
+            if not node:
                 return True
-            #check for a tree is not a valid BST
-            if not (node.val < right and node.val > left): #condition to return False
+            # Reject if node's value is out of valid range.
+            if not (
+                node.val < right_limit
+                and node.val > left_limit
+            ):
                 return False
-            # a binary tree is valid BST when it subTre is also valid
-            return valid(node.left, left, node.val) and valid(
-                node.right, node.val, right
-            )
+            # Propagate tighter bounds into each subtree.
+            return valid(
+                node.left, left_limit, node.val
+            ) and valid(node.right, node.val, right_limit)
 
         return valid(root, float("-inf"), float("inf"))

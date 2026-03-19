@@ -1,46 +1,45 @@
+"""
+Given an integer array nums, return all triplets
+[nums[i], nums[j], nums[k]] such that i, j, k are
+distinct and nums[i] + nums[j] + nums[k] == 0.
+The solution set must not contain duplicate triplets.
+
+Example:
+  Input:  nums=[-1,0,1,2,-1,-4]
+  Output: [[-1,-1,2],[-1,0,1]]
+"""
+
+
 def threeSum(nums: list[int]) -> list[list[int]]:
-    res = []
-    
-    # Step 1: Sort the array (O(n log n) time). 
-    # This is required for the two-pointer technique and makes finding duplicates easy.
+    result = []
+
+    # Sorting enables two-pointer and duplicate skipping.
     nums.sort()
-    
+
     for i in range(len(nums)):
-        # Step 2: Skip duplicate 'i' values.
-        # If the current number is the same as the previous one, we've already 
-        # checked all combinations for this starting number. Move on.
+        # Skip duplicate values for the outer element.
         if i > 0 and nums[i] == nums[i - 1]:
             continue
-            
-        # Step 3: Set up the two pointers for the remaining array to the right of 'i'
+
         left = i + 1
         right = len(nums) - 1
-        
-        # Step 4: The Two-Pointer loop
+
         while left < right:
             current_sum = nums[i] + nums[left] + nums[right]
-            
-            # If the sum is too large, we need a smaller number. Move right pointer left.
+
+            # Sum too large; shrink from the right.
             if current_sum > 0:
                 right -= 1
-                
-            # If the sum is too small, we need a bigger number. Move left pointer right.
+            # Sum too small; grow from the left.
             elif current_sum < 0:
                 left += 1
-                
-            # We found a valid triplet that equals 0!
             else:
-                res.append([nums[i], nums[left], nums[right]])
-                
-                # Step 5: Skip duplicate 'left' values.
-                # We must move the left pointer to find new potential pairs for the same 'i',
-                # but we need to ensure we don't land on the exact same number we just used.
+                result.append(
+                    [nums[i], nums[left], nums[right]]
+                )
                 left += 1
+                # Skip duplicate left values to avoid duplicates.
                 while left < right and nums[left] == nums[left - 1]:
                     left += 1
-                    
-                # Note: We don't strictly need a while-loop to skip 'right' duplicates here 
-                # because shifting 'left' to a new number guarantees the sum will change anyway, 
-                # naturally forcing 'right' to move in the next iteration of the main while-loop.
 
-    return res
+    return result

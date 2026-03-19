@@ -1,24 +1,19 @@
-#problem understanding
-    #Given an integer array nums and an integer k
-    #return the k most frequent elements.
-    # You may return the answer in any order.
+"""
+Given an integer array nums and an integer k,
+return the k most frequent elements. You may
+return the answer in any order.
 
-#strategy to solve problem:
-    #count (hash): to count number of element happend
-    #freq (list of list): 
-        #index is all possible frequent of element. len(nums) + 1   
-        #element (list): all element which happend index frequent  
-        #list of list to solve the problem of two element happend the same time
-    #res (list): to build response result
-        #because freq is to hold all possible frequent we have to loop throug it to collect value
-        #stop when we have collect all value
+Example:
+  Input:  nums=[1,1,1,2,2,3], k=2
+  Output: [1,2]
 
-#note about list extend() vs append:
-    # append will treat a list as one element
-    # extend will extend and treat a list as multiple elemnt
+Constraints:
+  Bucket sort by frequency avoids a heap for O(n).
+"""
 
-###################################reference solution
 from collections import Counter
+
+
 class Solution(object):
     def topKFrequent(self, nums, k):
         """
@@ -26,18 +21,18 @@ class Solution(object):
         :type k: int
         :rtype: List[int]
         """
-
         counter = Counter(nums)
+        # Index represents frequency; avoids sorting.
         freq = [[] for i in range(len(nums) + 1)]
 
-        #build freq
-        for v, f in counter.items():
-            freq[f].append(v)
+        # Place each value into the bucket for its count.
+        for value, frequency in counter.items():
+            freq[frequency].append(value)
 
-        #build res
-        res = []
+        # Collect from the highest-frequency buckets first.
+        result = []
         for i in range(len(freq) - 1, 0, -1):
-            for e in freq[i]:
-                res.append(e)
-                if len(res) == k:
-                    return res
+            for element in freq[i]:
+                result.append(element)
+                if len(result) == k:
+                    return result

@@ -1,36 +1,26 @@
 """
-strategy to solve the problem
-    problem:
-        given a list of nums. compute the length of longest subsequence
-        subsequence is array derive from array by remove some or no element without change position of elelment\
-    why:
-        using dynamic programming for a subarray problem
-        dp[i] is the length of subarray which have left index at i
-        dp[i] = max(dp[i], dp[j]+1). #
-        dp[j] is the right index of subarray
+Given an integer array nums, return the length of
+the longest strictly increasing subsequence.
+
+Example:
+  Input:  nums=[10,9,2,5,3,7,101,18]
+  Output: 4  ([2,3,7,101])
+
+Constraints:
+  dp[i] = max length of increasing subarray ending at index i.
 """
 
-class Solution:
-    def lengthOfLIS(self, nums: List[int]) -> int:
-        @cache
-        def dfs(i) -> int:
-            if i >= len(nums):
-                return 0
-            l = 1 #find depth of the tree
-            for j in range(i+1, len(nums)):
-                if nums[j] > nums[i]:
-                    l = max(l, 1 + dfs(j))
-            return l
-        return max([dfs(i) for i in range(len(nums))])
-    
+from typing import List
+
 
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
-
+        # dp[i] starts at 1 (the element alone).
         dp = [1] * len(nums)
 
         for i in range(len(nums)):
-            for j in range(i):
-                if nums[j] < nums[i]:
-                    dp[i] = max(dp[i], dp[j]+1) #count number of element in subarray which increasing
-        return max(dp) #return subarray which have longest increase subarray
+            for pos in range(i):
+                if nums[pos] < nums[i]:
+                    # Extend any increasing subarray ending at pos.
+                    dp[i] = max(dp[i], dp[pos] + 1)
+        return max(dp)

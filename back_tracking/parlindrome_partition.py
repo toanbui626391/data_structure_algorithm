@@ -1,35 +1,43 @@
 """
-strategy to solve the problem
-    problem: given string s, partition s so that partition is palindrome
-    why:
-        dfs(i):
-            i (int): is the index of current position tree
-            j (int): index for all possible partition or subTree
-            part (list): to collect valid partition of the current node through the deepth of the depth of the tree
-            res (list): collect part when reach the end of the tree
+Given a string s, partition it so that every
+substring in the partition is a palindrome.
+Return all possible palindrome partitionings.
 
+Example:
+  Input:  s="aab"
+  Output: [["a","a","b"],["aa","b"]]
+
+Constraints:
+  DFS with a palindrome check explores all valid cuts.
 """
+
 from typing import List
+
+
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
-        res, part = [], []
+        result = []
+        part = []
 
-        def dfs(i):
-            if i >= len(s):
-                res.append(part[:])
+        def dfs(idx):
+            # Reached end; all parts are palindromes.
+            if idx >= len(s):
+                result.append(part[:])
                 return
-            for j in range(i, len(s)): #j is  possible partition given current 
-                if self.isPali(s, i, j):
-                    part.append(s[i : j + 1]) #have to include j index
-                    dfs(j + 1) #subTree is remaininng string (j+1)
+            for end_idx in range(idx, len(s)):
+                if self.isPali(s, idx, end_idx):
+                    part.append(s[idx: end_idx + 1])
+                    dfs(end_idx + 1)
                     part.pop()
 
         dfs(0)
-        return res
-    #check is palindrome
-    def isPali(self, s, l, r):
-        while l < r:
-            if s[l] != s[r]:
+        return result
+
+    def isPali(self, s, left, right):
+        # Two-pointer palindrome check.
+        while left < right:
+            if s[left] != s[right]:
                 return False
-            l, r = l + 1, r - 1
+            left += 1
+            right -= 1
         return True

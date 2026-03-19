@@ -1,24 +1,29 @@
 """
-strategy to solve the problem 
-    problem: count number of good nodes
-        a good nodes is a node which nother nodes larger than it in the path from root to it's selft
-    why:
-        using dfs(root, maxVal)
-            root is the current node
-            maxVal to keep the current maxVal of path from root
-            res (int) or count to keep track of the current count
-        the number of good nodes equal: current node status (1 or 0) + number of good nodes in left subTree + right subTree
+In a binary tree, a node is "good" if no node
+on the path from root to that node has a greater
+value. Return the number of good nodes.
+
+Example:
+  Input:  root=[3,1,4,3,null,1,5]
+  Output: 4
+
+Constraints:
+  DFS carries the running max to evaluate each node.
 """
+
+
 class Solution:
-    def goodNodes(self, root: TreeNode) -> int:
-        def dfs(node, maxVal):
-            if not node: #the base case
+    def goodNodes(self, root: "TreeNode") -> int:
+        def dfs(node, max_val):
+            # An empty subtree contributes 0 good nodes.
+            if not node:
                 return 0
 
-            res = 1 if node.val >= maxVal else 0
-            maxVal = max(maxVal, node.val)
-            res += dfs(node.left, maxVal)
-            res += dfs(node.right, maxVal)
-            return res
+            # A node is good when its value is >= path max.
+            count = 1 if node.val >= max_val else 0
+            max_val = max(max_val, node.val)
+            count += dfs(node.left, max_val)
+            count += dfs(node.right, max_val)
+            return count
 
         return dfs(root, root.val)

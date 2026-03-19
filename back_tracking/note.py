@@ -1,41 +1,51 @@
+"""
+N-Queens backtracking reference implementation.
+Place n non-attacking queens on an n x n board.
+
+Example:
+  Input:  n=4
+  Output: [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
+"""
+
+from typing import List
+
+
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
         col = set()
-        posDiag = set()  # (r + c)
-        negDiag = set()  # (r - c)
+        pos_diag = set()
+        neg_diag = set()
 
-        res = []
+        result = []
         board = [["."] * n for i in range(n)]
 
         def backtrack(r):
-            #when traversa all layer or row
-            if r == n: 
-                #append a valid board. a boar is a list of string
-                copy = ["".join(row) for row in board] 
-                res.append(copy)
+            if r == n:
+                copy = ["".join(row) for row in board]
+                result.append(copy)
                 return
 
-            for c in range(n): #all possible col position is child
-                #quen can not be the same col. c in col where col is collection of col index which have been place quen
-                #quen can not be in the same positive diagnal. r + c
-                #quen can not be in the same negative diganl. r - c
-                if c in col or (r + c) in posDiag or (r - c) in negDiag: #invalidt board 
+            for c in range(n):
+                # Skip if any attack set includes this position.
+                if (
+                    c in col
+                    or (r + c) in pos_diag
+                    or (r - c) in neg_diag
+                ):
                     continue
-                
-                #update col set, positive diagnal, negative diagnal.
+
                 col.add(c)
-                posDiag.add(r + c)
-                negDiag.add(r - c)
+                pos_diag.add(r + c)
+                neg_diag.add(r - c)
                 board[r][c] = "Q"
 
-                #go to next layer
-                backtrack(r + 1) #layer is row index
+                backtrack(r + 1)
 
-                #reverse back for next child in the same layer
+                # Undo placement for the next candidate.
                 col.remove(c)
-                posDiag.remove(r + c)
-                negDiag.remove(r - c)
+                pos_diag.remove(r + c)
+                neg_diag.remove(r - c)
                 board[r][c] = "."
 
         backtrack(0)
-        return res
+        return result

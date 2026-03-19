@@ -1,27 +1,31 @@
 """
+Given an array of temperatures, return an array
+where each entry is the number of days until a
+warmer temperature. If no warmer day exists, use 0.
 
-strategy to solve the problem:
-    # daily temperature problem: find the number of day from the ith day will
-    # have warmer temperature
+Example:
+  Input:  temperatures=[73,74,75,71,69,72,76,73]
+  Output: [1,1,4,2,1,1,0,0]
 
-    # using stack strategy:
-        res (list): to hold result list
-        stack (list): to hold the index, temperature of daly
-        # for each iteration we will know the index (date) and it's
-        # temperature
-            # if 
+Constraints:
+  A monotonic stack resolves each temperature in O(n) total.
 """
- 
-#############################################reference solution
-from typing import List
-class Solution:
-    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
-        res = [0] * len(temperatures)
-        stack = []  # pair: [temp, index]
 
-        for i, t in enumerate(temperatures):
-            while stack and t > stack[-1][0]: # find result of all date in stack
-                stackT, stackInd = stack.pop()
-                res[stackInd] = i - stackInd
-            stack.append((t, i)) # build stack
-        return res
+from typing import List
+
+
+class Solution:
+    def dailyTemperatures(
+        self, temperatures: List[int]
+    ) -> List[int]:
+        result = [0] * len(temperatures)
+        # Stack holds (temperature, index) pairs.
+        stack = []
+
+        for i, temp in enumerate(temperatures):
+            # Pop all stack entries colder than today.
+            while stack and temp > stack[-1][0]:
+                stack_temp, stack_index = stack.pop()
+                result[stack_index] = i - stack_index
+            stack.append((temp, i))
+        return result

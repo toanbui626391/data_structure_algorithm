@@ -1,30 +1,40 @@
 """
-strategy to solve the problem:
-    problem: given a list of number nums which may contains duplicate values. Find all subset of list nums which do not contain duplicate
-    why:
-        because nums may contains duplicates therefor to avoid duplicate in subsets we have to consider to skip duplicate element in case of not choosing first element of duplicates
-        because not choosing first element of duplicate is the same problem of it's parent node
-        using dfs(i, subseet) just like subset problem but when we decide not to add, we not add consider that same element
+Given an integer array nums that may contain
+duplicates, return all possible unique subsets.
+
+Example:
+  Input:  nums=[1,2,2]
+  Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]
+
+Constraints:
+  Sort first; when skipping an element, skip all its duplicates.
 """
 
+from typing import List
+
+
 class Solution:
-    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
-        res = []
+    def subsetsWithDup(
+        self, nums: List[int]
+    ) -> List[List[int]]:
+        result = []
+        # Sorting groups duplicates so we can skip them.
         nums.sort()
 
-        def backtrack(i, subset):
-            if i == len(nums):
-                res.append(subset[::])
+        def backtrack(idx, subset):
+            if idx == len(nums):
+                result.append(subset[::])
                 return
 
-            # All subsets that include nums[i]
-            subset.append(nums[i])
-            backtrack(i + 1, subset)
+            # Branch 1: include nums[idx].
+            subset.append(nums[idx])
+            backtrack(idx + 1, subset)
             subset.pop()
-            # All subsets that don't include nums[i]
-            while i + 1 < len(nums) and nums[i] == nums[i + 1]:
-                i += 1
-            backtrack(i + 1, subset)
+
+            # Branch 2: exclude nums[idx] and all its duplicates.
+            while idx + 1 < len(nums) and nums[idx] == nums[idx + 1]:
+                idx += 1
+            backtrack(idx + 1, subset)
 
         backtrack(0, [])
-        return res
+        return result

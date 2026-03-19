@@ -1,30 +1,40 @@
 """
-strategy to solve the problem
-    problem: traverse the binary tre by level order
-    why
-        use bfs(root) because we want traverse the tree by level
-            queue (deque): to keep the nodes to be process
-                first in first ourt
+Given the root of a binary tree, return the level
+order traversal of its nodes' values as a list of
+lists, one list per level.
+
+Example:
+  Input:  root=[3,9,20,null,null,15,7]
+  Output: [[3],[9,20],[15,7]]
+
+Constraints:
+  BFS with a deque visits nodes exactly one level at a time.
 """
 
 from collections import deque
+from typing import List
+
+
 class Solution:
-    def levelOrder(self, root: TreeNode) -> List[List[int]]:
-        res = []
-        q = deque()
+    def levelOrder(
+        self, root: "TreeNode"
+    ) -> List[List[int]]:
+        result = []
+        queue = deque()
         if root:
-            q.append(root)
+            queue.append(root)
 
-        while q:
-            val = [] #hold vals of current level
+        while queue:
+            # Collect all values for the current level.
+            level_values = []
 
-            for i in range(len(q)): #process nodes at the current level
-                node = q.popleft()
-                val.append(node.val)
-                #collect nodes for the next level
+            for i in range(len(queue)):
+                node = queue.popleft()
+                level_values.append(node.val)
+                # Enqueue children for the next level.
                 if node.left:
-                    q.append(node.left)
+                    queue.append(node.left)
                 if node.right:
-                    q.append(node.right)
-            res.append(val)
-        return res
+                    queue.append(node.right)
+            result.append(level_values)
+        return result

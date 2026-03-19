@@ -1,35 +1,37 @@
 """
-strategy to solve the problem
-    problem: given 
-"""
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def maxPathSum(self, root: TreeNode) -> int:
-        res = root.val
+Given the root of a binary tree, return the maximum
+path sum. A path is any sequence of nodes where
+each pair is connected, and can start/end anywhere.
 
-        # return max path sum without split
+Example:
+  Input:  root=[-10,9,20,null,null,15,7]
+  Output: 42
+
+Constraints:
+  At each node, the split path = left max + right max + val.
+"""
+
+
+class Solution:
+    def maxPathSum(self, root: "TreeNode") -> int:
+        result = root.val
+
         def dfs(root):
-            nonlocal res
+            nonlocal result
             if not root:
                 return 0
 
+            left_max = dfs(root.left)
+            right_max = dfs(root.right)
+            # Negative contributions are ignored.
+            left_max = max(left_max, 0)
+            right_max = max(right_max, 0)
 
-            leftMax = dfs(root.left)
-            rightMax = dfs(root.right)
-            #why min sum is zero. 
-            leftMax = max(leftMax, 0)
-            rightMax = max(rightMax, 0)
+            # Update result with path through this node.
+            result = max(result, root.val + left_max + right_max)
 
-            # compute max path sum WITH split or path sum go through the current node
-            res = max(res, root.val + leftMax + rightMax)
-
-            #the value of current node, when it not split
-            return root.val + max(leftMax, rightMax)
+            # Return the best single-arm extension upward.
+            return root.val + max(left_max, right_max)
 
         dfs(root)
-        return res
+        return result

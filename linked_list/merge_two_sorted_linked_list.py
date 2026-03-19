@@ -1,35 +1,36 @@
-#strategy to solve the problem:
+"""
+Merge two sorted linked lists and return the
+merged list's head.
 
-    #why:
-        #because each linked list is sorted, we can grow a sorted linked list by compare each element in the two linked list to decide which element is on the growing linked list
-        #by default sorted is increasing value   
-        #start with dummy ListNode and grow it
-    #variables:
-        #dummy (ListNode): dummy starting node
-        #tail (ListNode): current node to grow for each iteration
-    #error notes:
-        #remember to update curr note. curr = curr.next. to make node linked together
-        #we have to remember input varialbes
+Example:
+  Input:  list1=[1,2,4], list2=[1,3,4]
+  Output: [1,1,2,3,4,4]
 
-#############################################reference solution
+Constraints:
+  A dummy head node avoids special-casing the first node.
+"""
+
+
 class Solution:
-    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-
+    def mergeTwoLists(
+        self,
+        list1: "Optional[ListNode]",
+        list2: "Optional[ListNode]",
+    ) -> "Optional[ListNode]":
         dummy = ListNode()
         tail = dummy
 
         while list1 and list2:
+            # Attach the smaller node to grow the merged list.
             if list1.val < list2.val:
-                #grow new node and update for next iteration
                 tail.next = list1
                 list1 = list1.next
             else:
                 tail.next = list2
                 list2 = list2.next
-            #prepare for next iteration    
             tail = tail.next
 
-        #handle remaining linked list
+        # Attach whichever list still has remaining nodes.
         if list1:
             tail.next = list1
         else:

@@ -1,27 +1,28 @@
-#problem understand
-    #Alphanumeric characters include letters and numbers.
-    #when a phrase is conver to all lower case and remove all non-alphnumeric character you can read from left is the same as read from the right
+"""
+A phrase is a palindrome if, after converting to
+lowercase and removing non-alphanumeric characters,
+it reads the same forward and backward.
 
-#strategy to solve the problem
-    #read from the left is also read from the right. Therefore, we using two point ter
-    #have to have machenisum to remove or check for non-alphanumeric
-    #we only have to check when l < r or in the middle point
-    #variable:
-        #l, r (int) to keep stack of position of each pointer
-        # l < r is the condition to stop the loop
-        # s.isalnum() to check is Alphanumeric character
-        # s.lower() to lower case in string method
+Example:
+  Input:  s="A man, a plan, a canal: Panama"
+  Output: True
 
-################################################################reference solution
+Constraints:
+  Use two pointers to avoid building a new string.
+"""
+
+
 class Solution:
     def isPalindrome(self, s: str) -> bool:
-        l, r = 0, len(s) -1
-        while l < r:
-            while l < r and not s[l].isalnum():
-                l += 1
-            while l < r and not s[r].isalnum():
-                r -= 1
-            if s[l].lower() != s[r].lower():
+        left, right = 0, len(s) - 1
+        while left < right:
+            # Advance past non-alphanumeric characters.
+            while left < right and not s[left].isalnum():
+                left += 1
+            while left < right and not s[right].isalnum():
+                right -= 1
+            # Case-insensitive comparison from both ends.
+            if s[left].lower() != s[right].lower():
                 return False
-            l, r = l + 1, r - 1
+            left, right = left + 1, right - 1
         return True

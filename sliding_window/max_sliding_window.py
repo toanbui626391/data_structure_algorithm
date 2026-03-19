@@ -1,35 +1,40 @@
+"""
+Given an array nums and an integer k, return the
+maximum value in each sliding window of size k.
 
-#strategy to solve the problem
-    #goal: find max value in window with size k
-    #why:
-        #using sliding windows
-        #using deque: 
-            #to hold the index of the current window
-            #to hold index of decreasing value of nums
-        #the key idea:
-            #to maintain maintain the decreasing que of index
-            #for very right index remove index which have value smaller than right index
+Example:
+  Input:  nums=[1,3,-1,-3,5,3,6,7], k=3
+  Output: [3,3,5,5,6,7]
+
+Constraints:
+  A monotonic deque maintains the window maximum in O(1).
+"""
+
 from typing import List
 from collections import deque
+
+
 class Solution:
-    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+    def maxSlidingWindow(
+        self, nums: List[int], k: int
+    ) -> List[int]:
         output = []
-        q = deque()  # index
-        l = r = 0
-        # O(n) O(n)
-        while r < len(nums):
-            # pop smaller values from q
-            while q and nums[q[-1]] < nums[r]:
-                q.pop()
-            q.append(r)
+        # Deque holds indices in decreasing order of value.
+        monotone_queue = deque()
+        left = right = 0
+        while right < len(nums):
+            # Remove indices whose values are smaller than current.
+            while monotone_queue and nums[monotone_queue[-1]] < nums[right]:
+                monotone_queue.pop()
+            monotone_queue.append(right)
 
-            # remove left val from window
-            if l > q[0]:
-                q.popleft()
+            # Evict the left index if it slid out of the window.
+            if left > monotone_queue[0]:
+                monotone_queue.popleft()
 
-            if (r + 1) >= k:
-                output.append(nums[q[0]])
-                l += 1
-            r += 1
+            if (right + 1) >= k:
+                output.append(nums[monotone_queue[0]])
+                left += 1
+            right += 1
 
         return output

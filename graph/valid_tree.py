@@ -1,49 +1,60 @@
 """
-strategy to solve the problem
-    problem: 
-        given a list of edges. check is it a valid tree
-    why:
-        using union find algorithm to count connected component by build tree
-        if connected component is 1 then this is a valid tree with node redundant egdes
+Given n nodes and a list of edges, return true if
+the edges form a valid tree (connected, no cycles).
 
+Example:
+  Input:  n=5, edges=[[0,1],[0,2],[0,3],[1,4]]
+  Output: True
+
+Constraints:
+  A valid tree has exactly one connected component and no cycles.
 """
+
+from typing import List
+
+
 class Solution:
     """
     @param n: An integer
     @param edges: a list of undirected edges
     @return: true if it's a valid tree, or false
     """
-    def __find(self, n: int) -> int: #help function which only use by other function __function_name()
-        """
-        find root of node. we travese the graph tree and find root if the current node is it's parent
-        """
-        while n != self.parents.get(n, n):#
-            n = self.parents.get(n, n)
-        return n
 
-    def __connect(self, n: int, m: int) -> None:
-        pn = self.__find(n)
-        pm = self.__find(m)
-        if pn == pm:
+    def __find(self, node: int) -> int:
+        """
+        Find root by following parent links until self-loop.
+        """
+        while node != self.parents.get(node, node):
+            node = self.parents.get(node, node)
+        return node
+
+    def __connect(self, node_n: int, node_m: int) -> None:
+        root_n = self.__find(node_n)
+        root_m = self.__find(node_m)
+        if root_n == root_m:
             return
-        if self.heights.get(pn, 1) > self.heights.get(pm, 1):
-            self.parents[pn] = pm
+        # Union by height to keep trees shallow.
+        if self.heights.get(root_n, 1) > self.heights.get(root_m, 1):
+            self.parents[root_n] = root_m
         else:
-            self.parents[pm] = pn
-            self.heights[pm] = self.heights.get(pn, 1) + 1
+            self.parents[root_m] = root_n
+            self.heights[root_m] = (
+                self.heights.get(root_n, 1) + 1
+            )
         self.components -= 1
 
-    def valid_tree(self, n: int, edges: List[List[int]]) -> bool:
-        # init here as not sure that ctor will be re-invoked in different tests
-        self.parents = {} #{node: node's_parent}
-        self.heights = {} #{node: size}
-        self.components = n #number of component
+    def valid_tree(
+        self, n: int, edges: List[List[int]]
+    ) -> bool:
+        self.parents = {}
+        self.heights = {}
+        self.components = n
 
-        for e1, e2 in edges:
-            if self.__find(e1) == self.__find(e2):  # 'redundant' edge
+        for first, second in edges:
+            # A redundant edge creates a cycle; not a valid tree.
+            if self.__find(first) == self.__find(second):
                 return False
-            self.__connect(e1, e2)
+            self.__connect(first, second)
 
-        return self.components == 1  # forest contains one tree
-
-
+        # A valid tree has exactly one connected component.
+        return self.components == 1

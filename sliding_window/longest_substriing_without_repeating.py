@@ -1,22 +1,28 @@
-#strategy to solve the problem
-    #goal:
+"""
+Given a string s, find the length of the longest
+substring without repeating characters.
 
-    #why
-        #because substring have to be not repeating we have to find the way to keep unique set of char and the index of the last char without repeating
-        #char_set (set): to keep the unique subset of the string
-        #they key is remove all element on the left untill there are no repeat of the right
+Example:
+  Input:  s="abcabcbb"
+  Output: 3
 
-#reference solution
+Constraints:
+  Expand right; shrink left until no duplicate exists.
+"""
+
+
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        charSet = set()
-        l = 0
-        res = 0
+        # Track characters currently in the window.
+        char_set = set()
+        left = 0
+        result = 0
 
         for r in range(len(s)):
-            while s[r] in charSet: #shift the left until remove left repeated char
-                charSet.remove(s[l])
-                l += 1
-            charSet.add(s[r])
-            res = max(res, r - l + 1)
-        return res
+            # Remove leftmost chars until the duplicate is gone.
+            while s[r] in char_set:
+                char_set.remove(s[left])
+                left += 1
+            char_set.add(s[r])
+            result = max(result, r - left + 1)
+        return result

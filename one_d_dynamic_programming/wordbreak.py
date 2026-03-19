@@ -1,39 +1,30 @@
 """
-strategy to solve the problem
-    problem:
-        given string s and a list of words wordDict. check can we break s in to space separated or not
-    why:
-        using dynamic programming for a subarray problem
-        loop from 1 to len(s+1) because the edge case of s[j:i] when i is the last element of
-        dp[i] is the right index of substring
-        condition to be a word is the left index is the right index of other word and that word in wordDict
+Given a string s and a dictionary wordDict, return
+true if s can be segmented into a space-separated
+sequence of dictionary words.
+
+Example:
+  Input:  s="leetcode", wordDict=["leet","code"]
+  Output: True
+
+Constraints:
+  dp[i] = True if s[0:i] can be segmented from the dictionary.
 """
 
-"""
-Recursion and Memorization style
-    We need to understand decision tree and then code recursive for backtracking
+from typing import List
+from functools import cache
 
-"""
 
 class Solution:
-    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        @cache
-        def dfs(substring):
-            if not substring:
-                return True
-            for w in wordDict:
-                if substring.startswith(w):
-                    if dfs(substring[len(w):]):
-                        return True
-            return False
-        return dfs(s)
-
-class Solution:
-    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+    def wordBreak(
+        self, s: str, wordDict: List[str]
+    ) -> bool:
+        # dp[i] means the first i characters can be word-broken.
         dp = [True] + [False] * len(s)
 
-        for i in range(1, len(s)+1):
-            for j in range(i+1):
-                if dp[j] and s[j:i] in wordDict: #the left index is mark at starting of a word
-                    dp[i] = True #the righ index is also the left index of other words
+        for end_idx in range(1, len(s) + 1):
+            for start_idx in range(end_idx + 1):
+                # Check if the left part is valid and right word exists.
+                if dp[start_idx] and s[start_idx:end_idx] in wordDict:
+                    dp[end_idx] = True
         return dp[-1]

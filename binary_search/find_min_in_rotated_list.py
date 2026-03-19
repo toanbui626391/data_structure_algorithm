@@ -1,46 +1,30 @@
-#problem understanding
+"""
+Given a rotated sorted array nums (no duplicates),
+return the minimum element.
 
-#strategy to solve the problem:
-    #why:
-        #because it is a sorted array and rorated therefore we can use binary search
-        #at the rotate point nums[l] > num[r]
-        #every element in left of pivot point will larger than every elemnt in right of pivot point
-        #inside the section nums[l] < numpr
+Example:
+  Input:  nums=[3,4,5,1,2]
+  Output: 1
 
-        #the key is to compare the middle position value to the most left position
-    #variables:
+Constraints:
+  Elements left of the pivot are all greater than elements
+  right of the pivot, enabling binary search.
+"""
 
-########################################reference to solve the problem
 from typing import List
-class Solution:
-    def findMin(self, nums: List[int]) -> int:
-        l, r = 0, len(nums) -1
-        res = nums[-1]
-        while l <= r:
-            mid = (l+r)//2
-            if nums[mid] > nums[-1]: #mid in higher section
-                l = mid + 1
-            else: #mid in lower section
-                r = mid - 1
-                res = min(res, nums[mid])
-        return res
 
 
 class Solution:
     def findMin(self, nums: List[int]) -> int:
-        start , end = 0 ,len(nums) - 1 
-        curr_min = float("inf")
-        
-        while start  <  end :
-            mid = (start + end ) // 2
-            curr_min = min(curr_min,nums[mid])
-            
-            # right has the min 
-            if nums[mid] > nums[end]:
-                start = mid + 1
-                
-            # left has the  min 
+        left, right = 0, len(nums) - 1
+        result = nums[-1]
+        while left <= right:
+            mid = (left + right) // 2
+            # Mid is in the higher (left) section of rotation.
+            if nums[mid] > nums[-1]:
+                left = mid + 1
             else:
-                end = mid - 1 
-                
-        return min(curr_min,nums[start])
+                # Mid is in the lower (right) section.
+                right = mid - 1
+                result = min(result, nums[mid])
+        return result

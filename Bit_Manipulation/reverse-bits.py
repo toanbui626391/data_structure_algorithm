@@ -1,13 +1,24 @@
+"""
+Reverse the bits of a given 32-bit unsigned
+integer.
+
+Example:
+  Input:  n=43261596 (binary: 00000010...)
+  Output: 964176192
+
+Constraints:
+  Build result bit by bit: left-shift result to
+  make room, then OR in the lowest bit of n,
+  then right-shift n.
+"""
+
+
 class Solution:
     def reverseBits(self, n: int) -> int:
-
-        res = 0
+        result = 0
         for i in range(32):
-            #(res << 1) or left shift with 1 -> current position to find bit
-            #(n&1) -> to find last bit is 0 or 1
-            #(res << 1) | (n&1) -> add found last bit to current index
-            #n>>1 -> move to next bit
-            res = (res << 1) | (n&1)
+            # Shift result left; add current lowest bit.
+            result = (result << 1) | (n & 1)
+            # Advance to next bit of n.
             n >>= 1
-        return res
-        
+        return result

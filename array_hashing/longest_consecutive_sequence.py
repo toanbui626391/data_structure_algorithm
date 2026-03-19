@@ -1,26 +1,30 @@
-#problem understanding
-    #Given an unsorted array of integers nums, 
-    #return the length of the longest consecutive elements sequence.
+"""
+Given an unsorted array of integers nums, return
+the length of the longest consecutive elements
+sequence.
 
-#strategy to solve the problem
-    #an element is head of sequece when e-1 not in set_collection
-    #using set to reduce number of element we need to check
-    #variable:
-        #longest (int): to find the longest 
-        #length (int): to find the length of current consecutive
-        #set_nums (list[int]): to store unique element 
+Example:
+  Input:  nums=[100,4,200,1,3,2]
+  Output: 4  (sequence: 1,2,3,4)
 
-##################reference solution
+Constraints:
+  Must run in O(n) time.
+"""
+
 from typing import List
+
+
 class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:
+        # A set reduces membership checks to O(1).
         set_nums = set(nums)
         longest = 0
         length = 0
-        for e in set_nums:
-            if e-1 not in set_nums: #check for head of sequence
+        for element in set_nums:
+            # Only start counting from the head of a sequence.
+            if element - 1 not in set_nums:
                 length = 1
-                while e + length in set_nums: 
+                while element + length in set_nums:
                     length += 1
             longest = max(length, longest)
         return longest

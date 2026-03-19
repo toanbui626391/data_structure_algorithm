@@ -1,48 +1,47 @@
 """
+Design an algorithm to serialize and deserialize a
+binary tree. The codec must encode to a string and
+decode back to the original tree structure.
 
+Example:
+  serialize([1,2,3,null,null,4,5]) -> "1,2,N,N,3,4,N,N,5,N,N"
+  deserialize("1,2,N,N,3,4,N,N,5,N,N") -> [1,2,3,null,null,4,5]
+
+Constraints:
+  DFS pre-order lets serialize and deserialize agree on order.
 """
-
-# Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
 
 
 class Codec:
     def serialize(self, root):
         """
-        usind dfs(root) traverl depth first search for each node and collect value str(node.val)
-        base case collect string N for None
+        DFS pre-order: record each value or "N" for null.
         """
         def dfs(root):
-            #base case
+            # Represent null nodes with "N".
             if not root:
-                res.append("N")
+                collected.append("N")
                 return
-            res.append(str(root.val))
+            collected.append(str(root.val))
             dfs(root.left)
             dfs(root.right)
-        res = []
-        dfs(root)
-        return ",".join(res)
 
-        
+        collected = []
+        dfs(root)
+        return ",".join(collected)
+
     def deserialize(self, data):
         """
-        using dfs() but for each node we popleft() of data (global variable) so right is build correct after left
+        Consume tokens left to right; reconstruct left before right.
         """
-
         def dfs():
-            val = data.pop(0)
-            #base case
+            val = tokens.pop(0)
             if val == "N":
                 return None
-            #build tree with depth first search. left then right
             root = TreeNode(val)
             root.left = dfs()
             root.right = dfs()
             return root
-        data = data.split(",")
+
+        tokens = data.split(",")
         return dfs()

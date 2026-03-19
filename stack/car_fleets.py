@@ -1,38 +1,38 @@
-#problem understanding
+"""
+There are n cars going to a target. Each car has
+a position and speed. A car fleet is one or more
+cars driving together at the same speed. Return
+the number of car fleets that will arrive.
 
-#strategy to solve the problem
-    #variable
-        #pair (position, speed) (list) decrease or reverse: 
-            #to keep track of start position and speed of cars
-            #because their is only one laind
-        #stack (time to complete remaining range): 
-            #number of remain element is the number of carfleet form
-        #why using if in this case:
-            # because we only watn to pop car which is forming carfleet after
-            # the first car in the carfleet
-##########################################reference solution
+Example:
+  Input:  target=12, position=[10,8,0,5,3], speed=[2,4,1,1,3]
+  Output: 3
+
+Constraints:
+  Sort by descending position; a slower leading car captures
+  faster trailing cars into the same fleet.
+"""
+
 from typing import List
+
+
 class Solution:
-    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
-        pair = [(p, s) for p, s in zip(position, speed)]
-        pair.sort(reverse=True)
+    def carFleet(
+        self,
+        target: int,
+        position: List[int],
+        speed: List[int],
+    ) -> int:
+        # Sort descending so we process from front to back.
+        pair = sorted(
+            [(pos, spd) for pos, spd in zip(position, speed)],
+            reverse=True,
+        )
         stack = []
-        for p, s in pair:  # Reverse Sorted Order
-            stack.append((target - p) / s)
-            if len(stack) >= 2 and stack[-1] <= stack[-2]:
-                stack.pop()
-        return len(stack)
-    
-#######################################reference solution v2
-# use stack to keep time the last one is the last car fleet time.
-# therefore len(stack) is number of carfleet form
-class Solution:
-    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
-        pair = sorted([(p, s) for p, s in zip(position, speed)], reverse=True)
-        stack = []
-        for p, s in pair:
-            time = (target-p)/s
-            # stack.append((target-p)/s)
+        for pos, spd in pair:
+            time = (target - pos) / spd
+            # A faster car joins the leader's fleet if it arrives
+            # no later than the car already at stack top.
             if stack and time <= stack[-1]:
                 continue
             stack.append(time)

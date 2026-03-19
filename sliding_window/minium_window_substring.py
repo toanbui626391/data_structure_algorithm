@@ -1,43 +1,55 @@
-#strategy to solve the problem
-    #goal:
-        # return the minimum window  substring of s such that every character in t (including duplicates) is included in the window
-    #why:
-        #using sliding window because this is a compare two counter problem. we compare letter between substring of s and string t
-        #
-    #variables:
-        #counter_t, counter_window: to count number of letter in t and window
-        #have, need (int): number of key match we have in window vs number of key in counter_t
-        #res [l, r]: to keep the index of left and right of substring
-        #res_len (float): to keep the length of current substring
+"""
+Given strings s and t, return the minimum window
+substring of s that contains every character in t
+(including duplicates). Return "" if none exists.
+
+Example:
+  Input:  s="ADOBECODEBANC", t="ABC"
+  Output: "BANC"
+
+Constraints:
+  Track "have" vs "need" to know when window is valid.
+"""
 
 from collections import Counter
+
+
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
         if t == "":
             return ""
 
-        counter_t, counter_window = Counter(t), Counter()
+        counter_t = Counter(t)
+        counter_window = Counter()
 
-        have, need = 0, len(counter_t) #
-        res, resLen = [-1, -1], float("infinity")
-        l = 0
+        have = 0
+        need = len(counter_t)
+        result = [-1, -1]
+        result_len = float("infinity")
+        left = 0
         for r in range(len(s)):
-            c = s[r]
-            counter_window[c] += 1
+            char = s[r]
+            counter_window[char] += 1
 
-            if c in counter_t and counter_window[c] == counter_t[c]:
+            # A character satisfies its required count.
+            if (
+                char in counter_t
+                and counter_window[char] == counter_t[char]
+            ):
                 have += 1
 
             while have == need:
-                # update our result
-                if (r - l + 1) < resLen:
-                    res = [l, r]
-                    resLen = r - l + 1
-                # pop from the left of our window
-                counter_window[s[l]] -= 1
-                if s[l] in counter_t and counter_window[s[l]] < counter_t[s[l]]:
+                # Update result if this window is smaller.
+                if (r - left + 1) < result_len:
+                    result = [left, r]
+                    result_len = r - left + 1
+                # Shrink from the left and update counts.
+                counter_window[s[left]] -= 1
+                if (
+                    s[left] in counter_t
+                    and counter_window[s[left]] < counter_t[s[left]]
+                ):
                     have -= 1
-                l += 1
-        l, r = res
-        return s[l : r + 1] if resLen != float("infinity") else ""
-
+                left += 1
+        left, r = result
+        return s[left: r + 1] if result_len != float("infinity") else ""

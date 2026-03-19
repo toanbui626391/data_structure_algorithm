@@ -1,39 +1,34 @@
-# problem understanding
-#     You are given an array of strings tokens that represents an arithmetic
-#     expression in a Reverse Polish Notation.
-#     Evaluate the expression. Return an integer that represents the value of
-#     the expression.
-#
-# strategy to solve the problem
-#     using stack because we can take two most recent number
-#         operation is do by sequence, result of the last operation will be
-#         append to stack and then continue
-#     check for operator character to do the operation
-#     if character is not operator just append number
-#     return is the last remaining number in the stack
-#     variable:
-#         stack to keep track of the two most recent numbers from tokes string
-#
-#     why using stack?
-#         stack to keep current two value of every operation.
+"""
+Evaluate an arithmetic expression in Reverse Polish
+Notation. Valid operators are +, -, *, /. Division
+truncates toward zero.
 
+Example:
+  Input:  tokens=["2","1","+","3","*"]
+  Output: 9
 
-##########################################reference solution
+Constraints:
+  A stack provides the two most recent operands for each op.
+"""
+
 from typing import List
+
+
 class Solution:
     def evalRPN(self, tokens: List[str]) -> int:
         stack = []
-        for c in tokens:
-            if c == "+":
+        for char in tokens:
+            if char == "+":
                 stack.append(stack.pop() + stack.pop())
-            elif c == "-":
-                a, b = stack.pop(), stack.pop()
-                stack.append(b - a)
-            elif c == "*":
+            elif char == "-":
+                first, second = stack.pop(), stack.pop()
+                stack.append(second - first)
+            elif char == "*":
                 stack.append(stack.pop() * stack.pop())
-            elif c == "/":
-                a, b = stack.pop(), stack.pop()
-                stack.append(int(b / a))
+            elif char == "/":
+                first, second = stack.pop(), stack.pop()
+                # int() truncates toward zero.
+                stack.append(int(second / first))
             else:
-                stack.append(int(c))
+                stack.append(int(char))
         return stack[0]

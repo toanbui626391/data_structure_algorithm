@@ -1,35 +1,56 @@
+"""
+Given string s and pattern p, implement regular
+expression matching with '.' (any char) and '*'
+(zero or more of the preceding element).
+
+Example:
+  Input:  s="aa", p="a*"
+  Output: True
+
+Constraints:
+  Memoized DFS on (i, j) indices; '*' requires
+  checking both zero-use and one-use branches.
+"""
+
+
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
-        memory = {}  # Memoization dictionary to store computed results
-        
-        def dfs(i, j):
-            # Check if the result for the current indices is already memoized
-            if (i, j) in memory:
-                return memory[(i, j)]
-            
-            # Base cases
-            if i >= len(s) and j >= len(p):
+        memo = {}
+
+        def dfs(idx_s, idx_p):
+            if (idx_s, idx_p) in memo:
+                return memo[(idx_s, idx_p)]
+
+            # Both exhausted: full match.
+            if idx_s >= len(s) and idx_p >= len(p):
                 return True
-            if j >= len(p):
+            # Pattern exhausted but string remains.
+            if idx_p >= len(p):
                 return False
 
-            # Check if the current characters match or if the pattern character is '.'
-            same = i < len(s) and (s[i] == p[j] or p[j] == ".")
-            
-            # If the next character in pattern is '*', handle the '*' wildcard character
-            if (j + 1) < len(p) and p[j + 1] == "*":
-                # Explore both options: matching zero occurrences and matching current character
-                memory[(i, j)] = dfs(i, j + 2) or (same and dfs(i + 1, j))
-                return memory[(i, j)]
-            
-            # If the characters match, move to the next characters in both strings
+            # Current chars match if equal or '.'.
+            same = idx_s < len(s) and (
+                s[idx_s] == p[idx_p] or p[idx_p] == "."
+            )
+
+            # Look-ahead for '*' wildcard.
+            if (
+                (idx_p + 1) < len(p)
+                and p[idx_p + 1] == "*"
+            ):
+                # Zero occurrences or one occurrence.
+                result = dfs(idx_s, idx_p + 2) or (
+                    same and dfs(idx_s + 1, idx_p)
+                )
+                memo[(idx_s, idx_p)] = result
+                return result
+
             if same:
-                memory[(i, j)] = dfs(i + 1, j + 1)
-                return memory[(i, j)]
-            
-            # If none of the above cases match, return False
-            memory[(i, j)] = False
+                result = dfs(idx_s + 1, idx_p + 1)
+                memo[(idx_s, idx_p)] = result
+                return result
+
+            memo[(idx_s, idx_p)] = False
             return False
 
-        # Start the DFS from the beginning of both strings
         return dfs(0, 0)

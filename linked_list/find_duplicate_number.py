@@ -1,24 +1,29 @@
 """
-strategy to solve the problem
-    #why:
-        #because we have n + 1 int in range [1, n] and only on repeat. Therefore, it is a linked list problem and we do not have node with value 0.
-        #this is a linked list problem nums[index] equal to node.next
-        #using floyd algorithm to find duplicate
-            #find first meet node with slow and fast
-            #find the second meet. and this is duplicate value
+Given an array nums containing n+1 integers in
+[1, n], find the one duplicate number. Use O(1)
+extra space; do not modify the array.
+
+Example:
+  Input:  nums=[1,3,4,2,2]
+  Output: 2
+
+Constraints:
+  Treat the array as a linked list; use Floyd's cycle detection.
 """
-########################reference solution
+
 
 class Solution:
-    def findDuplicate(self, nums: List[int]) -> int:
-        slow, fast = 0, 0
-        #find the fist mê
+    def findDuplicate(self, nums: "List[int]") -> int:
+        slow = 0
+        fast = 0
+        # Phase 1: find the intersection inside the cycle.
         while True:
             slow = nums[slow]
             fast = nums[nums[fast]]
             if slow == fast:
                 break
 
+        # Phase 2: find the cycle entrance (duplicate value).
         slow2 = 0
         while True:
             slow = nums[slow]

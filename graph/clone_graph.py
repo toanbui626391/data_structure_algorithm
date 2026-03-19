@@ -1,31 +1,30 @@
 """
-strategy to solve the problem
-    problem: 
-        make a clone of a graph
-        Node(val, neighbors)
-    why:
-        using newToOld hashMap to keep track of new and it copy
-        make a copy if have not do it yet. connect copy with its neighbor
-        remember to check the edge case when input node is None
-        dfs(node):
-            give copy node if input node exist in the map
-            normal case. make copy node and add to the map. build neighbors for for copy node
+Given a reference to a node in a connected undirected
+graph, return a deep copy (clone) of the graph.
+
+Example:
+  Input:  adjList=[[2,4],[1,3],[2,4],[1,3]]
+  Output: deep copy with same adjacency structure
+
+Constraints:
+  A hashmap from old nodes to copies avoids reprocessing.
 """
+
+
 class Solution:
     def cloneGraph(self, node: "Node") -> "Node":
-        #clone graph from starting node
-        oldToNew = {} #maping between node and copied node
+        # Maps each original node to its copy.
+        old_to_new = {}
 
         def dfs(node):
-            #base case, get the new node from oldToNew
-            if node in oldToNew:
-                return oldToNew[node]
-            #make a copy and add to newToNew hashMap
+            # Return existing copy if already cloned.
+            if node in old_to_new:
+                return old_to_new[node]
+            # Create a copy and register it before recursing.
             copy = Node(node.val)
-            oldToNew[node] = copy #for dict, key can be a instance of object
-            #get neighbor node from original node, and add copy neighbors of the copy
-            for nei in node.neighbors:
-                copy.neighbors.append(dfs(nei))
+            old_to_new[node] = copy
+            for neighbor in node.neighbors:
+                copy.neighbors.append(dfs(neighbor))
             return copy
-        #check a valid node before run dfs
+
         return dfs(node) if node else None

@@ -1,55 +1,60 @@
 """
-strategy to solve the problem
-    problem: 
-        given heights grid each cell is heigh of land
-        we have pacific ocean from top and left. atlantic ocean from bottom and right
-        return a list of cell (r, c) which water can flow to both pacific and atlantic
-    why:
-        using dfs(r, c, visited, prevHeight) for exploration and return a set of cell which water can flow. we will star search from pacific and atlantic
+Given a heights grid where water flows to adjacent
+cells with equal or lower height, find all cells
+from which water can flow to both the Pacific Ocean
+(top/left border) and the Atlantic Ocean (bottom/right).
+
+Example:
+  Input:  heights=[[1,2,2,3,5],[3,2,3,4,4],...]
+  Output: [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]
+
+Constraints:
+  Reverse DFS from ocean borders finds all reachable cells.
 """
+
 from typing import List
+
+
 class Solution:
-    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+    def pacificAtlantic(
+        self, heights: List[List[int]]
+    ) -> List[List[int]]:
+        num_rows = len(heights)
+        num_cols = len(heights[0])
 
-        h, w = len(heights), len(heights[0])
-
-        def dfs(r, c, visited, prevHeight):
+        def dfs(r, c, visited, prev_height):
             """
-            r, c (int): index position of the current cell
-            visisted (set): set of cell have been visited so far
-            preHeight (int): height of the previous cell
-            return set of cell which water can flow to pacific or atlantic
+            Mark cells reachable by flowing uphill from an ocean.
             """
-            #base case
             if (
-                r >= h
+                r >= num_rows
                 or r < 0
-                or c >= w
+                or c >= num_cols
                 or c < 0
-                or heights[r][c] < prevHeight
+                or heights[r][c] < prev_height
                 or (r, c) in visited
             ):
                 return
             visited.add((r, c))
-            #explore neighbors cell
-            dfs(r+1, c, visited, heights[r][c])
-            dfs(r-1, c, visited, heights[r][c])
-            dfs(r, c+1, visited, heights[r][c])
-            dfs(r, c-1, visited, heights[r][c])
+            dfs(r + 1, c, visited, heights[r][c])
+            dfs(r - 1, c, visited, heights[r][c])
+            dfs(r, c + 1, visited, heights[r][c])
+            dfs(r, c - 1, visited, heights[r][c])
 
-        #collect cell from pacific and atl
-        pac, atl = set(), set()
-        for r in range(h):
-            dfs(r, 0, pac, heights[r][0])
-            dfs(r, w-1, atl, heights[r][w-1])
-        for c in range(w):
-            dfs(0, c, pac, heights[0][c])
-            dfs(h-1, c, atl, heights[h-1][c])
-        
-        #collect cel from atlantic
-        res = []
-        for r in range(h):
-            for c in range(w):
-                if (r, c) in pac and (r, c) in atl:
-                    res.append((r,c))
-        return res
+        pacific = set()
+        atlantic = set()
+
+        for r in range(num_rows):
+            dfs(r, 0, pacific, heights[r][0])
+            dfs(r, num_cols - 1, atlantic, heights[r][num_cols - 1])
+        for c in range(num_cols):
+            dfs(0, c, pacific, heights[0][c])
+            dfs(num_rows - 1, c, atlantic, heights[num_rows - 1][c])
+
+        # Collect cells reachable from both oceans.
+        result = []
+        for r in range(num_rows):
+            for c in range(num_cols):
+                if (r, c) in pacific and (r, c) in atlantic:
+                    result.append((r, c))
+        return result

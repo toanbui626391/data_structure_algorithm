@@ -1,54 +1,38 @@
-# problem understanding
-#
-# strategy to solve the problem
-#     maxArea (int): to hold the current max value
-#     stack (index, height): to hold stack of index and height value
-#
-# why using stack
-#     stack (start, height): keep record of increase hights when we meet lower
-#     hight we can calculate area form by column of the pop stack
-#     max_area (int): to keep the current max area
-#     start = i: to keep the start index of col and
-##########################################reference solution
+"""
+Given an array of heights representing a histogram
+where each bar has width 1, find the area of the
+largest rectangle in the histogram.
+
+Example:
+  Input:  heights=[2,1,5,6,2,3]
+  Output: 10
+
+Constraints:
+  A monotonic stack tracks increasing bars and computes
+  rectangle area when a shorter bar is encountered.
+"""
+
 from typing import List
+
+
 class Solution:
     def largestRectangleArea(self, heights: List[int]) -> int:
-        maxArea = 0
-        stack = []  # pair: (index, height)
-
-        for i, h in enumerate(heights):
-            start = i
-            while stack and stack[-1][1] > h:
-                index, height = stack.pop()
-                maxArea = max(maxArea, height * (i - index))
-                start = index
-            stack.append((start, h))
-
-        for i, h in stack:
-            maxArea = max(maxArea, h * (len(heights) - i))
-        return maxArea
-
-    def largestRectangleArea(self, heights: List[int]) -> int:
-        # Append a 0-height bar to force calculation of all remaining bars
-        # This acts as a sentinel
+        # A sentinel bar forces remaining bars to be processed.
         heights.append(0)
-        # The stack will store indices.
-        # We add -1 as a base sentinel to simplify width calculation.
+        # Stack stores indices; -1 is a sentinel left boundary.
         stack = [-1]
         max_area = 0
         for i in range(len(heights)):
-            # We process bars when we find a bar shorter than the one 
-            # at the top of the stack.
-            # This new, shorter bar is the "right boundary".
-            while stack[-1] != -1 and heights[stack[-1]] >= heights[i]:
-                # This is the bar for which we are calculating the max area
-                h = heights[stack.pop()]
-                # stack[-1] is now the "left boundary"
-                # i is the "right boundary"
-                w = i - stack[-1] - 1
-                max_area = max(max_area, h * w)
-            # Push the current index onto the stack
-            stack.append(i)            
-        # Remove the sentinel bar we added (good practice, though not strictly needed)
-        heights.pop()        
-        return max_area          
+            # Process all bars taller than the current one.
+            while (
+                stack[-1] != -1
+                and heights[stack[-1]] >= heights[i]
+            ):
+                # Height of the popped bar.
+                height = heights[stack.pop()]
+                # Width is bounded by new top and current index.
+                width = i - stack[-1] - 1
+                max_area = max(max_area, height * width)
+            stack.append(i)
+        heights.pop()
+        return max_area

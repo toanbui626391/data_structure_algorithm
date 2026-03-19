@@ -1,45 +1,51 @@
 """
-strategy to solve the problem
-    problem: 
-        given a graph with n node and n edge. find edge which make this graph to tree (no cycle)
-        because we hav n nodes and n edges. we guarantee have one redundant egdes to make graph back to tree (no cycle)
-    why:
-        using union find algorithm to find number of component in graph
-        union find algorithm
-            find_root: 
-                given node n find root node of node n
-                node n is root node when n == parent[n]
+Given a graph that was a tree with one extra edge
+added, find and return that redundant edge.
 
+Example:
+  Input:  edges=[[1,2],[1,3],[2,3]]
+  Output: [2,3]
+
+Constraints:
+  Union-Find detects the first edge that connects two already-joined nodes.
 """
+
+from typing import List
+
+
 class Solution:
-    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
-        rank = {} #{node: rank}
-        parent = {} #{node: root_node}
-        #init value for rank and parent
-        components = len(edges)
-        # init rank and parent map
-        for i in range(1, len(edges)+1):
-            rank[i] = 1
-            parent[i] = i
-        def find_root(n):
+    def findRedundantConnection(
+        self, edges: List[List[int]]
+    ) -> List[int]:
+        # rank tracks tree sizes for union by rank.
+        rank = {}
+        # parent maps each node to its root representative.
+        parent = {}
+        for idx in range(1, len(edges) + 1):
+            rank[idx] = 1
+            parent[idx] = idx
+
+        def find_root(node):
             """
-            given node n find 
+            Return the root of node using path compression.
             """
-            p = parent[n]
-            while p != parent[p]: #check if p is root node of n
-                #move up to find root
-                parent[p] = parent[parent[p]] #update parent of p for quicker find
-                p = parent[p] #update for next iteration
-            return p #return root node p of node n
-        #union
-        for i,j in edges:
-            pi, pj = find_root(i), find_root(j)
-            if pi == pj:
-                return [i, j]
-            if rank[pi] > rank[pj]:
-                parent[pj] = pi
-                rank[pi] += rank[pj]
+            p = parent[node]
+            while p != parent[p]:
+                # Compress path by skipping one level.
+                parent[p] = parent[parent[p]]
+                p = parent[p]
+            return p
+
+        for first, second in edges:
+            root_first = find_root(first)
+            root_second = find_root(second)
+            # Same root means this edge is redundant.
+            if root_first == root_second:
+                return [first, second]
+            # Union by rank to keep trees shallow.
+            if rank[root_first] > rank[root_second]:
+                parent[root_second] = root_first
+                rank[root_first] += rank[root_second]
             else:
-                parent[pi] = pj
-                rank[pj] += rank[pi]
-            components -= 1
+                parent[root_first] = root_second
+                rank[root_second] += rank[root_first]

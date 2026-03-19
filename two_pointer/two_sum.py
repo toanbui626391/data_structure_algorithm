@@ -1,21 +1,26 @@
-#problem understanding
-    #Given an array of integers nums and an integer target, 
-    #return indices of the two numbers such that they add up to target
-    #You may assume that each input would have exactly one solution
-    #, and you may not use the same element twice
+"""
+Given an array of integers nums and an integer
+target, return indices of the two numbers such
+that they add up to target.
+Exactly one solution exists; each element used once.
 
-#strategy to solve the problem:
-    #because it is two sum. therefore we given the index we know the value of the second value
-    #variable:
-        #keeper (dict): to keep track of key-paire (value:index). which value have seen before.
-        #if we have compute the second value which have meet before return index of that value
-##################################################reference solution
+Example:
+  Input:  nums=[2,7,11,15], target=9
+  Output: [0,1]
+"""
+
 from typing import List
+
+
 class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
+    def twoSum(
+        self, nums: List[int], target: int
+    ) -> List[int]:
+        # Map seen values to their index for O(1) lookup.
         keeper = {}
-        for i, v in enumerate(nums):
-            value = target - v
-            if value in keeper:
-                return [i, keeper[value]]
-            keeper[v] = i #keep track of value and index have meet before
+        for i, value in enumerate(nums):
+            needed = target - value
+            if needed in keeper:
+                return [i, keeper[needed]]
+            # Record this value so future elements can find it.
+            keeper[value] = i
