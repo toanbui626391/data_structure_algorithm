@@ -7,8 +7,11 @@ Example:
   Input:  nums=[1,1,1,2,2,3], k=2
   Output: [1,2]
 
-Constraints:
-  Bucket sort by frequency avoids a heap for O(n).
+Approaches:
+- Bucket sort: O(n) time, O(n) space.
+  Index by frequency; no sorting needed.
+- Min heap: O(n log k) time, O(n) space.
+  Keep a heap of size k; efficient when k<<n.
 """
 
 
@@ -38,9 +41,34 @@ def topKFrequent(nums: list[int], k: int) -> list[int]:
     return result
 
 
+import heapq
+
+
+def topKFrequent_heap(
+    nums: list[int], k: int
+) -> list[int]:
+    # Build frequency map.
+    freq_map: dict[int, int] = {}
+    for num in nums:
+        freq_map[num] = freq_map.get(num, 0) + 1
+
+    # Use a min-heap of size k.
+    # heapq.nlargest selects top-k by frequency
+    # in O(n log k) time.
+    return heapq.nlargest(
+        k, freq_map.keys(), key=lambda x: freq_map[x]
+    )
+
+
 if __name__ == "__main__":
+    # --- Bucket sort ---
     # Expected: [1, 2]
     print(topKFrequent([1, 1, 1, 2, 2, 3], 2))
-
     # Expected: [1]
     print(topKFrequent([1], 1))
+
+    # --- Min heap ---
+    # Expected: [1, 2]
+    print(topKFrequent_heap([1, 1, 1, 2, 2, 3], 2))
+    # Expected: [1]
+    print(topKFrequent_heap([1], 1))

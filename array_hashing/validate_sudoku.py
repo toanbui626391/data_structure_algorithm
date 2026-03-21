@@ -10,7 +10,6 @@ Example:
   Output: True or False
 """
 
-from collections import defaultdict
 from typing import List
 
 
@@ -18,22 +17,65 @@ class Solution:
     def isValidSudoku(
         self, board: List[List[str]]
     ) -> bool:
-        # Sets indexed by row, col, or sub-square key.
-        row = defaultdict(set)
-        col = defaultdict(set)
-        square = defaultdict(set)
+        # Plain dicts; setdefault initialises a
+        # missing key with an empty set on first use.
+        row: dict = {}
+        col: dict = {}
+        square: dict = {}
+
         for r in range(9):
             for c in range(9):
                 if board[r][c] == ".":
                     continue
-                # Reject if the digit already appears.
+
+                val = board[r][c]
+                sq_key = (r // 3, c // 3)
+
+                # Reject if digit already appears.
                 if (
-                    board[r][c] in row[r]
-                    or board[r][c] in col[c]
-                    or board[r][c] in square[(r // 3, c // 3)]
+                    val in row.setdefault(r, set())
+                    or val in col.setdefault(c, set())
+                    or val in square.setdefault(
+                        sq_key, set()
+                    )
                 ):
                     return False
-                row[r].add(board[r][c])
-                col[c].add(board[r][c])
-                square[(r // 3, c // 3)].add(board[r][c])
+
+                row[r].add(val)
+                col[c].add(val)
+                square[sq_key].add(val)
+
         return True
+
+
+if __name__ == "__main__":
+    sol = Solution()
+
+    # Valid board — expected: True
+    valid_board = [
+        ["5","3",".",".","7",".",".",".","."],
+        ["6",".",".","1","9","5",".",".","."],
+        [".","9","8",".",".",".",".","6","."],
+        ["8",".",".",".","6",".",".",".","3"],
+        ["4",".",".","8",".","3",".",".","1"],
+        ["7",".",".",".","2",".",".",".","6"],
+        [".","6",".",".",".",".","2","8","."],
+        [".",".",".","4","1","9",".",".","5"],
+        [".",".",".",".","8",".",".","7","9"],
+    ]
+    print(sol.isValidSudoku(valid_board))
+
+    # Invalid board (duplicate 8 in first row)
+    # — expected: False
+    invalid_board = [
+        ["8","3",".",".","7",".",".",".","."],
+        ["6",".",".","1","9","5",".",".","."],
+        [".","9","8",".",".",".",".","6","."],
+        ["8",".",".",".","6",".",".",".","3"],
+        ["4",".",".","8",".","3",".",".","1"],
+        ["7",".",".",".","2",".",".",".","6"],
+        [".","6",".",".",".",".","2","8","."],
+        [".",".",".","4","1","9",".",".","5"],
+        [".",".",".",".","8",".",".","7","9"],
+    ]
+    print(sol.isValidSudoku(invalid_board))
