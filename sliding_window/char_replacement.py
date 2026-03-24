@@ -1,45 +1,61 @@
 """
+Problem: Longest Repeating Character Replacement
+
 Given a string s and an integer k, return the
 length of the longest substring containing the
-same letter after performing at most k replacements.
+same letter after performing at most k character
+replacements.
 
 Example:
   Input:  s="ABAB", k=2
-  Output: 4
+  Output: 4  (Replace both 'B's with 'A's)
 
-Constraints:
-  Window is valid when (size - max_char_count) <= k.
+Approach: Sliding Window
+  - Track character frequencies in the window.
+  - A window is valid if:
+    (length of window) - (most frequent char) <= k
+  - If the window becomes invalid, shrink it from
+    the left until it is valid again.
 """
 
 
 class Solution:
-    def characterReplacement(self, s: str, k: int) -> int:
-        # Plain dict; get() returns 0 for unseen keys.
-        char_counter: dict = {}
+    def characterReplacement(
+        self, s: str, k: int
+    ) -> int:
+        
+        counts = {}
         left = 0
-        result = 0
-        # Track max frequency to avoid recomputing it each step.
-        max_char = 0
-        for r in range(len(s)):
-            char_counter[s[r]] = (
-                char_counter.get(s[r], 0) + 1
-            )
-            max_char = max(max_char, char_counter[s[r]])
-            total_char = r - left + 1
-            # Shrink window when replacements needed exceed k.
-            if total_char - max_char > k:
-                char_counter[s[left]] = (
-                    char_counter.get(s[left], 0) - 1
-                )
+        max_len = 0
+
+        for right in range(len(s)):
+            # 1. Expand the window
+            char = s[right]
+            counts[char] = counts.get(char, 0) + 1
+
+            # Determine the current window size and 
+            # the frequency of the most common char.
+            window_len = right - left + 1
+            max_freq = max(counts.values())
+
+            # 2. Shrink the window if it's invalid
+            # Invalid = we need more than k replacements
+            while (window_len - max_freq) > k:
+                left_char = s[left]
+                counts[left_char] -= 1
                 left += 1
-            else:
-                result = max(result, total_char)
-        return result
+                
+                # Update window metrics after shrinking
+                window_len = right - left + 1
+                max_freq = max(counts.values())
+
+            # 3. Update the maximum valid window seen
+            max_len = max(max_len, window_len)
+
+        return max_len
 
 
 if __name__ == "__main__":
     sol = Solution()
-    # Expected: 4
-    print(sol.characterReplacement("ABAB", 2))
-    # Expected: 4
-    print(sol.characterReplacement("AABABBA", 1))
+    print(sol.characterReplacement("ABAB", 2))     # 4
+    print(sol.characterReplacement("AABABBA", 1))  # 4

@@ -1,74 +1,55 @@
 """
+Problem: Top K Frequent Elements
+
 Given an integer array nums and an integer k,
-return the k most frequent elements. You may
-return the answer in any order.
+return the k most frequent elements.
 
 Example:
   Input:  nums=[1,1,1,2,2,3], k=2
   Output: [1,2]
 
-Approaches:
-- Bucket sort: O(n) time, O(n) space.
-  Index by frequency; no sorting needed.
-- Min heap: O(n log k) time, O(n) space.
-  Keep a heap of size k; efficient when k<<n.
+Approach 1: Bucket Sort (O(N) Time)
+  - Group numbers into buckets where the bucket
+    index equals their frequency.
+
+Approach 2: Min-Heap (O(N log K) Time)
+  - Keep a heap of size K of the most frequent.
 """
 
-
-def topKFrequent(nums: list[int], k: int) -> list[int]:
-    # Build frequency map manually with a plain dict.
-    freq_map: dict[int, int] = {}
-    for num in nums:
-        freq_map[num] = freq_map.get(num, 0) + 1
-
-    # Index represents frequency; avoids sorting.
-    buckets: list[list[int]] = [
-        [] for _ in range(len(nums) + 1)
-    ]
-
-    # Place each value into the bucket for its count.
-    for value, frequency in freq_map.items():
-        buckets[frequency].append(value)
-
-    # Collect from highest-frequency buckets first.
-    result: list[int] = []
-    for i in range(len(buckets) - 1, 0, -1):
-        for element in buckets[i]:
-            result.append(element)
-            if len(result) == k:
-                return result
-
-    return result
-
-
+from typing import List
 import heapq
 
+class Solution:
+    def topKFrequent(
+        self, nums: List[int], k: int
+    ) -> List[int]:
+        
+        count = {}
+        for num in nums:
+            count[num] = count.get(num, 0) + 1
+            
+        # BUCKET SORT APPROACH (O(N))
+        freq = [[] for _ in range(len(nums) + 1)]
+        for num, c in count.items():
+            freq[c].append(num)
+            
+        res = []
+        for i in range(len(freq) - 1, 0, -1):
+            for num in freq[i]:
+                res.append(num)
+                if len(res) == k:
+                    return res
+        return res
 
-def topKFrequent_heap(
-    nums: list[int], k: int
-) -> list[int]:
-    # Build frequency map.
-    freq_map: dict[int, int] = {}
-    for num in nums:
-        freq_map[num] = freq_map.get(num, 0) + 1
-
-    # Use a min-heap of size k.
-    # heapq.nlargest selects top-k by frequency
-    # in O(n log k) time.
-    return heapq.nlargest(
-        k, freq_map.keys(), key=lambda x: freq_map[x]
-    )
-
-
-if __name__ == "__main__":
-    # --- Bucket sort ---
-    # Expected: [1, 2]
-    print(topKFrequent([1, 1, 1, 2, 2, 3], 2))
-    # Expected: [1]
-    print(topKFrequent([1], 1))
-
-    # --- Min heap ---
-    # Expected: [1, 2]
-    print(topKFrequent_heap([1, 1, 1, 2, 2, 3], 2))
-    # Expected: [1]
-    print(topKFrequent_heap([1], 1))
+    def topKFrequent_heap(
+        self, nums: List[int], k: int
+    ) -> List[int]:
+        
+        count = {}
+        for num in nums:
+            count[num] = count.get(num, 0) + 1
+            
+        # HEAP APPROACH (O(N log K))
+        return heapq.nlargest(
+            k, count.keys(), key=lambda x: count[x]
+        )

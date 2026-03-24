@@ -1,28 +1,41 @@
 """
+Problem: Longest Substring Without Repeating Chars
+
 Given a string s, find the length of the longest
 substring without repeating characters.
 
 Example:
   Input:  s="abcabcbb"
-  Output: 3
+  Output: 3  ("abc")
 
-Constraints:
-  Expand right; shrink left until no duplicate exists.
+Approach: Sliding Window
+  - Use a HashSet to track unique characters in
+    the current window.
+  - Expand the right pointer.
+  - If a duplicate is found, shrink the left
+    pointer until the duplicate is removed.
 """
 
 
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        # Track characters currently in the window.
-        char_set = set()
+        
+        window_chars = set()
         left = 0
-        result = 0
+        max_len = 0
 
-        for r in range(len(s)):
-            # Remove leftmost chars until the duplicate is gone.
-            while s[r] in char_set:
-                char_set.remove(s[left])
+        for right in range(len(s)):
+            # If we see a duplicate, shrink from left
+            # until the duplicate is removed from the set.
+            while s[right] in window_chars:
+                window_chars.remove(s[left])
                 left += 1
-            char_set.add(s[r])
-            result = max(result, r - left + 1)
-        return result
+                
+            # Now it's safe to add the right character
+            window_chars.add(s[right])
+            
+            # Update our maximum length found
+            current_len = right - left + 1
+            max_len = max(max_len, current_len)
+            
+        return max_len

@@ -1,44 +1,45 @@
 """
+Problem: Encode and Decode Strings
+
 Encode a list of strings to a single string.
 Decode that string back to the original list.
 
-The encoding prefixes each string with its length
-and a '#' delimiter so decoding is unambiguous.
-
 Example:
-  Input:  ["lint","code","love","you"]
-  Encoded: "4#lint4#code4#love3#you"
+  Input:  ["lint","code","love"]
+  Encoded: "4#lint4#code4#love"
+
+Approach: Length Prefixing
+  - Prefix each string with `length` + `#`.
+  - When decoding, read digits until `#` to find
+    the exact length of the upcoming string.
 """
+
+from typing import List
 
 
 class Solution:
-    """
-    @param: strs: a list of strings
-    @return: encodes a list of strings to a single string.
-    """
+    def encode(self, strs: List[str]) -> str:
+        # Prefix length lets decode find boundaries
+        return "".join(f"{len(s)}#{s}" for s in strs)
 
-    def encode(self, strs):
-        result = ""
-        for string in strs:
-            # Prefix length lets decode find each string's end.
-            result += str(len(string)) + "#" + string
-        return result
-
-    """
-    @param: s: A string
-    @return: decodes a single string to a list of strings
-    """
-
-    def decode(self, s):
-        result = []
+    def decode(self, s: str) -> List[str]:
+        res = []
         i = 0
 
         while i < len(s):
-            # Find '#' to locate the boundary of the length prefix.
             j = i
+            # Scan forward to find the delimiter '#'
             while s[j] != "#":
                 j += 1
+                
             length = int(s[i:j])
-            result.append(s[j + 1: j + 1 + length])
-            i = j + 1 + length
-        return result
+            
+            # The actual substring starts after '#'
+            start = j + 1
+            end = start + length
+            res.append(s[start:end])
+            
+            # Advance pointer to next encoded string
+            i = end
+            
+        return res

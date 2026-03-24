@@ -1,60 +1,37 @@
 """
+Problem: Maximum Subarray
+
 Given an integer array nums, return the subarray
 with the largest sum, and return its sum.
 
-A subarray is a contiguous non-empty sequence
-of elements within an array.
-
-Example 1:
+Example:
   Input:  nums=[-2,1,-3,4,-1,2,1,-5,4]
-  Output: 6
-  Explanation: [4,-1,2,1] has the largest sum.
+  Output: 6  (subarray: [4,-1,2,1])
 
-Example 2:
-  Input:  nums=[1]
-  Output: 1
-
-Example 3:
-  Input:  nums=[5,4,-1,7,8]
-  Output: 23
-
-Constraints:
-  1 <= nums.length <= 100,000
-  -10,000 <= nums[i] <= 10,000
+Approach: Kadane's Algorithm
+  - Iterate through the array keeping a running sum.
+  - If the running sum becomes negative, it hurts
+    future windows. Reset it to 0.
+  - Constantly track the max sum seen.
 """
 
+from typing import List
 
-def maxSubArray(nums: list[int]) -> int:
-    # Kadane's algorithm: extend the current window
-    # or start fresh when the running sum goes
-    # negative.
-    current_sum = nums[0]
-    best_sum = nums[0]
 
-    for num in nums[1:]:
-        # A negative running sum hurts future windows;
-        # reset to just this element.
-        if current_sum < 0:
-            current_sum = num
-        else:
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        best_sum = nums[0]
+        current_sum = 0
+
+        for num in nums:
+            # Drop a negative prefix sum
+            if current_sum < 0:
+                current_sum = 0
+                
             current_sum += num
+            
+            # Update best seen
+            if current_sum > best_sum:
+                best_sum = current_sum
 
-        # Track the best sum seen so far.
-        if current_sum > best_sum:
-            best_sum = current_sum
-
-    return best_sum
-
-
-if __name__ == "__main__":
-    case_one = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
-    # Expected: 6
-    print(maxSubArray(case_one))
-
-    case_two = [1]
-    # Expected: 1
-    print(maxSubArray(case_two))
-
-    case_three = [5, 4, -1, 7, 8]
-    # Expected: 23
-    print(maxSubArray(case_three))
+        return best_sum
