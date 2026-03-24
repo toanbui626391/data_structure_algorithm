@@ -1,31 +1,52 @@
 """
+Problem: Valid Parentheses
+
 Given a string s containing only '(', ')', '{',
 '}', '[', ']', determine if the input is valid.
-Open brackets must be closed in the correct order.
+Open brackets must be closed by the same type of
+brackets and in the correct order.
 
 Example:
   Input:  s="()[]{}"
   Output: True
 
-Constraints:
-  A stack of open brackets is emptied by matching closes.
+Approach: Stack
+  - Use a stack to keep track of opening brackets.
+  - Map each closing bracket to its matching
+    opening bracket.
+  - If we see an opening bracket, push it.
+  - If we see a closing bracket, the top of the
+    stack MUST be its matching opening bracket.
+    Otherwise, the string is invalid.
 """
 
 
 class Solution:
     def isValid(self, s: str) -> bool:
-        # Map each closing bracket to its matching opener.
-        bracket_map = {")": "(", "]": "[", "}": "{"}
+        # Map closing brackets to opening brackets
+        match = {")": "(", "]": "[", "}": "{"}
         stack = []
 
         for char in s:
-            if char not in bracket_map:
+            # 1. If it's a closing bracket
+            if char in match:
+                # Top of stack must be its opener
+                if stack and stack[-1] == match[char]:
+                    stack.pop()
+                else:
+                    return False
+            
+            # 2. If it's an opening bracket
+            else:
                 stack.append(char)
-                continue
-            # Closing bracket must match the top open bracket.
-            if not stack or stack[-1] != bracket_map[char]:
-                return False
-            stack.pop()
 
-        # A valid string leaves no unmatched openers.
-        return not stack
+        # 3. Valid strings leave an empty stack
+        return len(stack) == 0
+
+
+if __name__ == "__main__":
+    sol = Solution()
+    print(sol.isValid("()"))      # True
+    print(sol.isValid("()[]{}"))  # True
+    print(sol.isValid("(]"))      # False
+    print(sol.isValid("([)]"))    # False
