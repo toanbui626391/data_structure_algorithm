@@ -1,30 +1,39 @@
 """
+Problem: Min Stack
+
 Design a stack that supports push, pop, top, and
 retrieving the minimum element in constant time.
 
 Example:
-  MinStack(); push(-2); push(0); push(-3);
-  getMin() -> -3; pop(); top() -> 0; getMin() -> -2
+  MinStack()
+  push(-2); push(0); push(-3);
+  getMin() -> -3
+  pop()
+  top() -> 0
+  getMin() -> -2
 
-Constraints:
-  A parallel min stack always tracks the current minimum.
+Approach: Two Stacks
+  - main_stack: stores the actual values.
+  - min_stack: stores the minimum value seen so
+    far up to that parallel depth.
 """
 
 
 class MinStack:
     def __init__(self):
         self.stack = []
-        # Mirrors stack; each entry is the min at that depth.
         self.min_stack = []
 
     def push(self, val: int) -> None:
         self.stack.append(val)
-        # Carry the current minimum down through each push.
-        val = min(
-            val,
-            self.min_stack[-1] if self.min_stack else val,
-        )
-        self.min_stack.append(val)
+        
+        # Determine the new minimum at this level
+        if self.min_stack:
+            current_min = min(val, self.min_stack[-1])
+        else:
+            current_min = val
+            
+        self.min_stack.append(current_min)
 
     def pop(self) -> None:
         self.stack.pop()
