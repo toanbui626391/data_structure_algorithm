@@ -32,7 +32,8 @@ class Solution:
         self, candidates: List[int], target: int
     ) -> List[List[int]]:
         """
-        Generates all unique combinations that sum to target.
+        Generates all unique combinations that sum to
+        the given target.
         """
         results = []
         path = []
@@ -51,10 +52,12 @@ class Solution:
                 # 1. Choose: Add candidate to path.
                 path.append(candidates[i])
 
-                # 2. Explore: Recurse with same index (allows reuse).
+                # 2. Explore: Recurse with same index to
+                # allow reusing the same element.
                 backtrack(remainder - candidates[i], i)
 
-                # 3. Un-choose: Undo choice for next sibling.
+                # 3. Un-choose: Undo choice for the
+                # next sibling in the search tree.
                 path.pop()
 
         backtrack(target, 0)
@@ -66,7 +69,10 @@ if __name__ == "__main__":
     sol = Solution()
     test_candidates = [2, 3, 6, 7]
     test_target = 7
-    output = sol.combinationSum(test_candidates, test_target)
+    # Call combinationSum and print results.
+    output = sol.combinationSum(
+        test_candidates, test_target
+    )
     print(f"Candidates: {test_candidates}")
     print(f"Target: {test_target}")
     print(f"Output: {output}")
