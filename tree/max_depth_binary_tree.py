@@ -32,3 +32,15 @@ class Solution:
                     queue.append(node.right)
             level += 1
         return level
+
+    def maxDepthDFS(self, root: "TreeNode") -> int:
+        # Base case: empty node contributes depth 0.
+        if not root:
+            return 0
+
+        # Recurse on both children.
+        left_depth = self.maxDepthDFS(root.left)
+        right_depth = self.maxDepthDFS(root.right)
+
+        # This node adds 1 to the deeper subtree's depth.
+        return 1 + max(left_depth, right_depth)
