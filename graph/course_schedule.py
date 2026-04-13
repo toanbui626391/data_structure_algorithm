@@ -24,34 +24,38 @@ class SolutionDFS:
         prerequisites: List[List[int]],
     ) -> bool:
         # Map each course to its list of prerequisites.
-        pre_map = {idx: [] for idx in range(numCourses)}
+        pre_map = {i: [] for i in range(numCourses)}
 
         for course, prereq in prerequisites:
             pre_map[course].append(prereq)
 
-        # Tracks courses currently on the DFS path.
-        visiting = set()
+        # Track state: 0=Unvisited, 1=Visiting, 2=Visited
+        states = [0] * numCourses
 
         def dfs(course):
-            # Seeing the same node twice means a cycle.
-            if course in visiting:
+            # Seeing a visiting node means a cycle.
+            if states[course] == 1:
                 return False
-            # No prerequisites; this course can be done.
-            if pre_map[course] == []:
+            # Fully visited node is already safe.
+            if states[course] == 2:
                 return True
 
-            visiting.add(course)
+            # Mark as visiting.
+            states[course] = 1
+
             for prereq in pre_map[course]:
                 if not dfs(prereq):
                     return False
-            # Remove from path; mark prereqs as cleared.
-            visiting.remove(course)
-            pre_map[course] = []
+
+            # Mark as visited.
+            states[course] = 2
             return True
 
         for course in range(numCourses):
-            if not dfs(course):
-                return False
+            if states[course] == 0:
+                if not dfs(course):
+                    return False
+
         return True
 
 
