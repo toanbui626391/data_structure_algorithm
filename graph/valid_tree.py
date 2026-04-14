@@ -14,47 +14,45 @@ from typing import List
 
 
 class Solution:
-    """
-    @param n: An integer
-    @param edges: a list of undirected edges
-    @return: true if it's a valid tree, or false
-    """
-
-    def __find(self, node: int) -> int:
-        """
-        Find root by following parent links until self-loop.
-        """
-        while node != self.parents.get(node, node):
-            node = self.parents.get(node, node)
-        return node
-
-    def __connect(self, node_n: int, node_m: int) -> None:
-        root_n = self.__find(node_n)
-        root_m = self.__find(node_m)
-        if root_n == root_m:
-            return
-        # Union by height to keep trees shallow.
-        if self.heights.get(root_n, 1) > self.heights.get(root_m, 1):
-            self.parents[root_n] = root_m
-        else:
-            self.parents[root_m] = root_n
-            self.heights[root_m] = (
-                self.heights.get(root_n, 1) + 1
-            )
-        self.components -= 1
-
-    def valid_tree(
-        self, n: int, edges: List[List[int]]
-    ) -> bool:
-        self.parents = {}
-        self.heights = {}
-        self.components = n
-
-        for first, second in edges:
-            # A redundant edge creates a cycle; not a valid tree.
-            if self.__find(first) == self.__find(second):
+    def validTree(self, n: int, edges: list[list[int]]) -> bool:
+        # Condition 1: A valid tree must have exactly n - 1 edges.
+        if len(edges) != n - 1:
+            return False
+            
+        # Initialize Union-Find structures
+        parent = [i for i in range(n)]
+        rank = [1] * n
+        
+        def find(node):
+            # Path Compression
+            if parent[node] != node:
+                parent[node] = find(parent[node])
+            return parent[node]
+            
+        def union(node1, node2):
+            root1 = find(node1)
+            root2 = find(node2)
+            
+            # Cycle detected
+            if root1 == root2:
                 return False
-            self.__connect(first, second)
+                
+            # Union by Rank
+            if rank[root1] > rank[root2]:
+                parent[root2] = root1
+            elif rank[root1] < rank[root2]:
+                parent[root1] = root2
+            else:
+                parent[root2] = root1
+                rank[root1] += 1
+                
+            return True
 
-        # A valid tree has exactly one connected component.
-        return self.components == 1
+        # Process all edges
+        for u, v in edges:
+            if not union(u, v):
+                # If union returns False, a cycle was found
+                return False
+                
+        # If n-1 edges are added without cycles, it's guaranteed to be a single component
+        return True
