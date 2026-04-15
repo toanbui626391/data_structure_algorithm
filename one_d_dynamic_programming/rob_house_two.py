@@ -15,29 +15,39 @@ Constraints:
 from typing import List
 
 
-class Solution:
-    def rob(self, nums: List[int]) -> int:
+def rob_two_optimized(nums: List[int]) -> int:
+    if not nums:
+        return 0
+    if len(nums) == 1:
+        return nums[0]
 
-        def rob_helper(data: List[int]) -> int:
-            num_houses = len(data)
-            if num_houses <= 2:
-                return max(data)
-            current = 0
-            previous = 0
-            for value in data:
-                current, previous = (
-                    max(value + previous, current),
-                    current,
-                )
-            return current
+    def rob_linear(data: List[int]) -> int:
+        if len(data) <= 2:
+            return max(data)
 
-        if len(nums) < 2:
-            return max(nums)
-        # Compare robbing [0..n-2] vs [1..n-1] to handle the circle.
-        return max(
-            rob_helper(nums[:-1]),
-            rob_helper(nums[1:]),
-        )
+        # Variables representing dp[i-2] and dp[i-1]
+        two_houses_back = data[0]
+        one_house_back = max(data[0], data[1])
+
+        # Iterate from house 3 up to n
+        for i in range(2, len(data)):
+            # Max of robbing current vs skip
+            current = max(
+                one_house_back,
+                two_houses_back + data[i],
+            )
+
+            # Shift variables forward
+            two_houses_back = one_house_back
+            one_house_back = current
+
+        return one_house_back
+
+    # Compare [0..n-2] vs [1..n-1] for the circle.
+    return max(
+        rob_linear(nums[:-1]),
+        rob_linear(nums[1:]),
+    )
 
 
 # Standard 1D top-down DP with memoization.

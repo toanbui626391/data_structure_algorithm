@@ -14,19 +14,29 @@ Constraints:
 from typing import List
 
 
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        if len(nums) <= 2:
-            return max(nums)
-        # Rolling variables track the previous two dp values.
-        current = 0
-        previous = 0
-        for value in nums:
-            current, previous = (
-                max(value + previous, current),
-                current,
-            )
-        return current
+def rob_optimized(nums: List[int]) -> int:
+    if not nums:
+        return 0
+    if len(nums) <= 2:
+        return max(nums)
+
+    # Variables representing dp[i-2] and dp[i-1]
+    two_houses_back = nums[0]
+    one_house_back = max(nums[0], nums[1])
+
+    # Iterate from house 3 up to n
+    for i in range(2, len(nums)):
+        # Calculate max if we rob current vs skip
+        current = max(
+            one_house_back,
+            two_houses_back + nums[i],
+        )
+
+        # Shift variables forward for the next iteration
+        two_houses_back = one_house_back
+        one_house_back = current
+
+    return one_house_back
 
 
 # Standard 1D top-down DP with memoization.
