@@ -20,18 +20,16 @@ class Solution:
             return 0
 
         n = len(s)
-        # Initialize an array to store the number of
-        # decoding ways for each prefix length.
-        dp = [0] * (n + 1)
-
-        # Base cases: an empty string and a string of
-        # length 1 have exactly 1 decoding way.
-        dp[0] = 1
-        dp[1] = 1
+        # Maintain only two variables instead of a
+        # full array to optimize space to O(1).
+        prev2 = 1
+        prev1 = 1
 
         # Iterate over the string from the second
         # character to the end.
         for i in range(2, n + 1):
+            current = 0
+
             # Extract the single digit ending at the
             # current position.
             one_digit = int(s[i - 1:i])
@@ -43,16 +41,20 @@ class Solution:
             # If the single digit is valid, add the
             # decoding ways from the previous step.
             if 1 <= one_digit <= 9:
-                dp[i] += dp[i - 1]
+                current += prev1
 
             # If the two digits form a valid character,
             # add ways from two steps back.
             if 10 <= two_digits <= 26:
-                dp[i] += dp[i - 2]
+                current += prev2
 
-        # The final answer is stored in the last
-        # element of the dp array.
-        return dp[n]
+            # Shift the variables forward for the
+            # next mathematical iteration.
+            prev2 = prev1
+            prev1 = current
+
+        # The final answer is stored in prev1.
+        return prev1
 
 
 if __name__ == "__main__":
