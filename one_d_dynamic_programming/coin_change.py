@@ -15,16 +15,22 @@ from typing import List
 
 
 class Solution:
-    def coinChange(
-        self, coins: List[int], amount: int
-    ) -> int:
-        # dp[a] is the minimum coins to reach amount a.
-        dp = [float("inf")] * (amount + 1)
-        # Zero coins are needed to make amount 0.
+    def coinChange(self, coins: list[int], amount: int) -> int:
+        # Initialize the dp array with infinity
+        # We use amount + 1 as a safe "infinity" because the max possible 
+        # coins needed would be 'amount' (using all 1-cent coins)
+        dp = [amount + 1] * (amount + 1)
+        
+        # Base case: 0 coins needed to make amount 0
         dp[0] = 0
-        for coin in coins:
-            for target in range(coin, amount + 1):
-                dp[target] = min(
-                    dp[target], dp[target - coin] + 1
-                )
-        return -1 if dp[-1] == float("inf") else dp[-1]
+        
+        # Iterate through all amounts from 1 to the target
+        for a in range(1, amount + 1):
+            for c in coins:
+                # If the coin is smaller or equal to the current amount
+                if a - c >= 0:
+                    # The core DP formula
+                    dp[a] = min(dp[a], dp[a - c] + 1)
+                    
+        # If the target amount is still "infinity", it means it's impossible
+        return dp[amount] if dp[amount] != amount + 1 else -1
