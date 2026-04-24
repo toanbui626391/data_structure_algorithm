@@ -12,7 +12,7 @@ properties:
   locally best choice at each step.
 - **Optimal substructure:** an optimal solution
   to the whole problem contains optimal solutions
-  to its subproblems.
+  to its subproblems .
 
 ---
 
