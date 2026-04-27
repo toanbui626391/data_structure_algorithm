@@ -20,61 +20,27 @@ from typing import List
 
 
 class Solution:
-    def insert(
-        self,
-        intervals: List[List[int]],
-        new_interval: List[int],
-    ) -> List[List[int]]:
+    def insert(self, intervals: list[list[int]], newInterval: list[int]) -> list[list[int]]:
         result = []
-
-        for interval in intervals:
-            # Interval ends before the new one starts.
-            if interval[1] < new_interval[0]:
+        
+        for i, interval in enumerate(intervals):
+            # Case 1: newInterval is completely before the current interval
+            if newInterval[1] < interval[0]:
+                result.append(newInterval)
+                # We can return immediately by concatenating the rest of the list
+                return result + intervals[i:]
+            
+            # Case 2: newInterval is completely after the current interval
+            elif newInterval[0] > interval[1]:
                 result.append(interval)
-            
-            # Interval starts after the new one ends.
-            elif interval[0] > new_interval[1]:
-                result.append(new_interval)
-                new_interval = interval
-            
-            # Intervals overlap, so merge them together.
+                
+            # Case 3: Overlap exists, merge them into newInterval
             else:
-                new_start = min(
-                    interval[0], new_interval[0]
-                )
-                new_end = max(
-                    interval[1], new_interval[1]
-                )
-                new_interval = [new_start, new_end]
-
-        # Append the final merged or remaining interval.
-        result.append(new_interval)
+                newInterval[0] = min(newInterval[0], interval[0])
+                newInterval[1] = max(newInterval[1], interval[1])
+                
+        # If we loop through the whole array without triggering Case 1,
+        # the newInterval (or the merged mega-interval) goes at the very end.
+        result.append(newInterval)
         
         return result
-
-
-if __name__ == "__main__":
-    sol = Solution()
-
-    # Test case 1
-    intervals_1 = [[1, 3], [6, 9]]
-    new_interval_1 = [2, 5]
-    
-    res_1 = sol.insert(intervals_1, new_interval_1)
-    
-    print("Test 1:")
-    print(f"Input: {intervals_1}, {new_interval_1}")
-    print(f"Output: {res_1}")
-    print()
-
-    # Test case 2
-    intervals_2 = [
-        [1, 2], [3, 5], [6, 7], [8, 10], [12, 16]
-    ]
-    new_interval_2 = [4, 8]
-    
-    res_2 = sol.insert(intervals_2, new_interval_2)
-    
-    print("Test 2:")
-    print(f"Input: {intervals_2}, {new_interval_2}")
-    print(f"Output: {res_2}")
