@@ -16,25 +16,26 @@ from functools import cache
 from typing import List
 
 
+from typing import List
+
 class Solution:
-    def eraseOverlapIntervals(
-        self, intervals: List[List[int]]
-    ) -> int:
-        intervals = sorted(intervals)
-
-        @cache
-        def dp(idx):
-            # Find longest non-overlapping chain.
-            curr_start, curr_end = intervals[idx]
-            for pos in range(idx + 1, len(intervals)):
-                next_start, next_end = intervals[pos]
-                # No overlap: extend chain.
-                if curr_end <= next_start:
-                    return 1 + dp(pos)
-                # Contained: skip contained interval.
-                if curr_end > next_end:
-                    return dp(pos)
-            return 1
-
-        # Removals = total minus longest kept chain.
-        return len(intervals) - dp(0)
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        if not intervals:
+            return 0
+        
+        # 1. Sort by end time: O(n log n)
+        intervals.sort(key=lambda x: x[1])
+        
+        count_kept = 0
+        last_end_time = float('-inf')
+        
+        # 2. Greedy selection: O(n)
+        for start, end in intervals:
+            if start >= last_end_time:
+                # No overlap, keep this interval
+                count_kept += 1
+                last_end_time = end
+            # Else: it overlaps, so we "skip" (remove) it
+                
+        # 3. Result is total minus those we managed to keep
+        return len(intervals) - count_kept
