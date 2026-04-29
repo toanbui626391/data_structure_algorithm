@@ -12,12 +12,11 @@ Constraints:
 """
 
 
-class Solution:
-    def hammingWeight(self, n: int) -> int:
-        count = 0
-        while n != 0:
-            # Lowest bit is 1 if n is odd.
-            count += n & 1
-            # Shift right to examine next bit.
-            n >>= 1
-        return count
+def hammingWeight(n):
+    count = 0
+    while n > 0:
+        # Wipe out the lowest 1 bit
+        n = n & (n - 1)
+        # Increment our count of 1s found
+        count += 1
+    return count
