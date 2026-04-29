@@ -10,6 +10,11 @@ Example:
 Constraints:
   Right-shift halves the number; reuse the bit
   count of i//2 and add the lowest bit of i.
+  An even number always has the exact same number of 1-bits
+    as exactly half of itself
+  An odd number always has exactly one more 1-bit 
+    than the even number that came right before it 
+    (or, similarly, one more than half of itself rounded down).
 """
 
 from typing import List
