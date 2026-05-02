@@ -15,16 +15,26 @@ from typing import List
 
 
 class Solution:
-    def canPartition(self, nums: List[int]) -> bool:
-        total = sum(nums)
-        # An odd total cannot be split into two equal halves.
-        if total & 1:
-            return False
-        half = total >> 1
-        # dp[curr] means a subset summing to curr is achievable.
-        dp = [True] + [False] * half
-        for num in nums:
-            # Iterate in reverse to avoid using num more than once.
-            for curr in range(half, num - 1, -1):
-                dp[curr] = dp[curr] or dp[curr - num]
-        return dp[-1]
+  def canPartition(nums):
+      total_sum = sum(nums)
+      
+      # If the sum is odd, we can't split it equally
+      if total_sum % 2 != 0:
+          return False
+      
+      target = total_sum // 2
+      # dp[i] will be True if a sum of i is possible
+      dp = [False] * (target + 1)
+      dp[0] = True
+      
+      for num in nums:
+          # Iterate backwards to avoid using the current num multiple times
+          for i in range(target, num - 1, -1):
+              if dp[i - num]:
+                  dp[i] = True
+          
+          # Optimization: If we found the target, we can stop early
+          if dp[target]:
+              return True
+              
+      return dp[target]
