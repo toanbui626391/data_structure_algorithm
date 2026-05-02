@@ -14,13 +14,15 @@ from typing import List
 
 
 class Solution:
-    def lengthOfLIS(self, nums: List[int]) -> int:
-        # dp[i] starts at 1 (the element alone).
-        dp = [1] * len(nums)
-
-        for i in range(len(nums)):
-            for pos in range(i):
-                if nums[pos] < nums[i]:
-                    # Extend any increasing subarray ending at pos.
-                    dp[i] = max(dp[i], dp[pos] + 1)
-        return max(dp)
+  def lengthOfLIS(nums):
+      if not nums: return 0
+      
+      # Every element is a subsequence of length 1
+      dp = [1] * len(nums)
+      
+      for i in range(len(nums)):
+          for j in range(i):
+              if nums[j] < nums[i]:
+                  dp[i] = max(dp[i], dp[j] + 1)
+                  
+      return max(dp)
