@@ -31,3 +31,24 @@ class Solution:
             )
 
         return dfs(0, 0)
+
+    def findTargetSumWaysDP(nums, target):
+        total_sum = sum(nums)
+        
+        # Check if the target is physically possible
+        if abs(target) > total_sum or (target + total_sum) % 2 != 0:
+            return 0
+        
+        # Calculate our new subset target 'S'
+        subset_target = (target + total_sum) // 2
+        
+        # This is now exactly like "Coin Change 2" but with one-time use items
+        dp = [0] * (subset_target + 1)
+        dp[0] = 1 # Base case: one way to make sum 0
+        
+        for num in nums:
+            # Iterate backwards to ensure each number is used only once
+            for i in range(subset_target, num - 1, -1):
+                dp[i] += dp[i - num]
+                
+        return dp[subset_target]        
